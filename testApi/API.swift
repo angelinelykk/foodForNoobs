@@ -76,6 +76,7 @@ enum SignUpError : Error {
     case emailAlreadyInUse
     case errorWritingToDatabase
     case weakPassword
+    case usageLimitExceeded
     case unspecified
 }
 
@@ -162,6 +163,11 @@ class RecipeAPI {
             }
             let decoder = JSONDecoder()
             do {
+                let http = urlresponse as! HTTPURLResponse
+                if http.statusCode == 403 {
+                    completion?(.failure(.usageLimitExceeded))
+                    print("Usage Limit Exceeded")
+                }
                 let recipes = try decoder.decode([Recipe].self, from: data!)
                 completion?(.success(recipes))
             } catch {
@@ -185,6 +191,11 @@ class RecipeAPI {
             }
             let decoder = JSONDecoder()
             do {
+                let http = urlresponse as! HTTPURLResponse
+                if http.statusCode == 403 {
+                    completion?(.failure(.usageLimitExceeded))
+                    print("Usage Limit Exceeded")
+                }
                 let data = Data(base64Encoded: data!)
                 if let image = UIImage(data: data!) {
                     completion?(.success(image))

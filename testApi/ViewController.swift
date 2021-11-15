@@ -26,13 +26,13 @@ class ViewController: UIViewController {
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
         //Register new user on the RecipeAPi instance
-        RecipeAPI.shared.register(username: "alexander124356", password: "yay", completion: { result in
+        RecipeAPI.shared.register(username: "alexander1243567", password: "yay", completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success:
                 //Login
-                RecipeAPI.shared.login(username: "alexander124356", password: "yay", completion: { result in
+                RecipeAPI.shared.login(username: "alexander1243567", password: "yay", completion: { result in
                     switch result {
                     case .failure(let error):
                         print(error)
@@ -49,7 +49,7 @@ class ViewController: UIViewController {
     func finishLoading() {
         var recipes = [Recipe]()
         //Perform a search for recipes with the word thai in either title or ingredients
-        RecipeAPI.shared.search(searchTerms: ["thai"], criteria: ["title","ingredients"], completion: { result in
+        RecipeAPI.shared.search(searchTerms: ["pasta","pesto"], criteria: ["title","ingredients"], completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
