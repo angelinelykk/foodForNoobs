@@ -71,6 +71,22 @@ struct Nutrition: Codable {
     var sug : Double
 }
 
+struct OptionalNutrition: Codable {
+    var fat : Double = -1
+    var nrg : Double = -1
+    var pro : Double = -1
+    var sat : Double = -1
+    var sod : Double = -1
+    var sug : Double = -1
+}
+struct NutritionRange: Codable {
+    var minimum : OptionalNutrition
+    var maximum : OptionalNutrition
+    init(minimum: OptionalNutrition, maximum: OptionalNutrition) {
+        self.minimum = minimum
+        self.maximum = maximum
+    }
+}
 //Some errors for error reporting to user. Not fully implemented yet
 enum SignUpError : Error {
     case emailAlreadyInUse
@@ -202,6 +218,47 @@ class RecipeAPI {
                 } else {
                     print("couldn't decode image")
                 }
+            } catch {
+                print(error)
+            }
+            
+        })
+        task.resume()
+    }
+    
+    //Function makes a meal plan. Takes in a number of meals, string array of cuisine names, nutrition range constructed with two OptionalNutition objects minimum and maximum, and a string array of ingredients. Backend to return relevant recipes not implemented yet, but does return numMeals random recipes to test views.
+    func makeMealPlan(numMeals: Int, cuisines: [String], nutritionRanges: NutritionRange?, ingredients: [String], completion: ((Result<[Recipe],SignUpError>)->Void)?) {
+        validate_token()
+        var nutritionString = ""
+        if let nutritionRanges = nutritionRanges {
+            nutritionString += "fat=" + String(nutritionRanges.minimum.fat) + "-" + String(nutritionRanges.maximum.fat) + "&"
+            nutritionString += "nrg=" + String(nutritionRanges.minimum.nrg) + "-" +  String(nutritionRanges.maximum.nrg) + "&"
+            nutritionString += "sat=" + String(nutritionRanges.minimum.sat) + "-" + String(nutritionRanges.maximum.sat) + "&"
+            nutritionString += "sod=" + String(nutritionRanges.minimum.sod) + "-" + String(nutritionRanges.maximum.sod) + "&"
+            nutritionString += "sug=" + String(nutritionRanges.minimum.sug) + "-" + String(nutritionRanges.maximum.sug) + "&"
+            nutritionString += "pro=" + String(nutritionRanges.minimum.pro) + "-" + String(nutritionRanges.maximum.pro)
+        } else {
+            nutritionString = "none"
+        }
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/make_meal_plan/meals=\(numMeals)&cuisine=\(cuisines.joined(separator: "-"))&nutrition=\(nutritionString)&ingredients=\(ingredients.joined(separator: "-"))")!)
+        request.httpMethod = "GET"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            print(data)
+            let decoder = JSONDecoder()
+            do {
+                let http = urlresponse as! HTTPURLResponse
+                if http.statusCode == 403 {
+                    completion?(.failure(.usageLimitExceeded))
+                    print("Usage Limit Exceeded")
+                }
+                let recipes = try decoder.decode([Recipe].self, from: data!)
+                completion?(.success(recipes))
             } catch {
                 print(error)
             }
