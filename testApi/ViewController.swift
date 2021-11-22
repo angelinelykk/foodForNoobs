@@ -11,28 +11,64 @@ import UIKit
 //Example ViewController where I initialize a new user, perform a search, and get the first image of a recipe in the search
 class ViewController: UIViewController {
     
-    let imageView : UIImageView = {
-        let view = UIImageView()
+    let imageViews : [UIImageView] = {
+        return (0..<5).map { index in
+                let view = UIImageView()
+                view.translatesAutoresizingMaskIntoConstraints = false
+                return view
+        }
+    }()
+    let scrollView : UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    let contentView : UIView = {
+        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(imageView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        for imageView in imageViews {
+            contentView.addSubview(imageView)
+        }
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+        ])
+        NSLayoutConstraint.activate([
+            imageViews[0].topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageViews[0].centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            imageViews[0].widthAnchor.constraint(equalTo: contentView.widthAnchor)
+        ])
+        for i in 1..<imageViews.count {
+            NSLayoutConstraint.activate([
+                imageViews[i].topAnchor.constraint(equalTo: imageViews[i-1].bottomAnchor),
+                imageViews[i].centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                imageViews[i].widthAnchor.constraint(equalTo: contentView.widthAnchor)
+            ])
+        }
+        NSLayoutConstraint.activate([
+            imageViews[imageViews.count-1].bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         //Register new user on the RecipeAPi instance
-        RecipeAPI.shared.register(username: "alexander12435678", password: "yay", completion: { result in
+        RecipeAPI.shared.register(username: "alexander1243567891233111111111", password: "yay", completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success:
                 //Login
-                RecipeAPI.shared.login(username: "alexander1243567", password: "yay", completion: { result in
+                RecipeAPI.shared.login(username: "alexander1243567891233111111111", password: "yay", completion: { result in
                     switch result {
                     case .failure(let error):
                         print(error)
@@ -47,26 +83,33 @@ class ViewController: UIViewController {
     }
     
     func finishLoading() {
-        var recipes = [Recipe]()
+        var response : MealPlanResponse!
         //Perform a search for recipes with the word thai in either title or ingredients
-        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["thai","italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: 2, nrg: 3, pro: 4, sat: 5, sod: 6, sug: 7), maximum: OptionalNutrition(fat: 10, nrg: 11, pro: 12, sat: 13, sod: 14, sug: 15)), ingredients: ["pasta"], completion: { result in
+        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["indonesian","thai","chinese","japanese","italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: -1, nrg: -1, pro: 17, sat: -1, sod: 0.15, sug: -1), maximum: OptionalNutrition(fat: -1, nrg: -1, pro: -1, sat: -1, sod: 0.3, sug: 15)), ingredients: ["pasta","tomato","tofu","green","noodle"], completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success(let data):
-                recipes = data
+                response = data
+                let failed_nutrition = response.missing_nutrition
+                let failed_ingredients = response.missing_ingredients
+                print("missing nutrition: " + String(describing: failed_nutrition))
+                print("missing ingredients: " + String(describing: failed_ingredients))
+                let recipes = response.recipes
                 var image : UIImage?
                     //Get the image for the first image in the first recipe retrieved in the previous search
-                    RecipeAPI.shared.getImage(id: recipes[0].image_ids[0], completion: { result in
+                for i in 0..<self.imageViews.count {
+                    RecipeAPI.shared.getImage(id: recipes[i].image_ids[0], completion: { result in
                         switch result {
                         case .failure(let error):
                             print(error)
                         case .success(let im):
                             DispatchQueue.main.sync {
-                                self.imageView.image = im
+                                self.imageViews[i].image = im
                             }
                         }
                     })
+                }
             }
         })
     }

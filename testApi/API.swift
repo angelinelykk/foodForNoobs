@@ -2,6 +2,17 @@ import UIKit
 
 import Foundation
 
+class MealPlanResponse {
+    var recipes : [Recipe]
+    var missing_nutrition : [String: Float]
+    var missing_ingredients : [String]
+    init(recipes : [Recipe], missing_nutrition: [String: Float], missing_ingredients: [String]) {
+        self.recipes = recipes
+        self.missing_nutrition = missing_nutrition
+        self.missing_ingredients = missing_ingredients
+    }
+}
+
 public struct Recipe: Codable {
     //This is the recipe class which holds all relevant information about a recipe.
     
@@ -101,7 +112,7 @@ class RecipeAPI {
     //Token for api acccess. Automatically renewed by the validateToken method
     private var token: String!
     private var loginTime : Date!
-    //Stores username and password for authentication
+    //Stores username and password for authentication. Refresh tokens --> user signs in two tokens. One is regular session token one is a refresh token. Session token expires in a week. Refresh in a month. Refresh can be used to create a new token... etc.
     private var username : String!
     private var password : String!
     //Shared instance. This is how the API should be accessed
@@ -226,17 +237,18 @@ class RecipeAPI {
         task.resume()
     }
     
-    //Function makes a meal plan. Takes in a number of meals, string array of cuisine names, nutrition range constructed with two OptionalNutition objects minimum and maximum, and a string array of ingredients. Backend to return relevant recipes not implemented yet, but does return numMeals random recipes to test views.
-    func makeMealPlan(numMeals: Int, cuisines: [String], nutritionRanges: NutritionRange?, ingredients: [String], completion: ((Result<[Recipe],SignUpError>)->Void)?) {
+    //Function makes a meal plan. Takes in a number of meals, string array of cuisine names, nutrition range constructed with two OptionalNutition objects minimum and maximum, and a string array of ingredients. Backend to return relevant recipes implemented to try to match constraints, will return recipes and constraints it does not match. Cuisines are taken as guidance but not guaranteed. They filter set of searched recipes, but response will not necessarily contain all cuisines. The completion has either an error or MealPlanResponse, which has recipes as well as criteria that were missed.
+    func makeMealPlan(numMeals: Int, cuisines: [String], nutritionRanges: NutritionRange?, ingredients: [String], completion: ((Result<MealPlanResponse,SignUpError>)->Void)?) {
         validate_token()
+        //URL with params?
         var nutritionString = ""
         if let nutritionRanges = nutritionRanges {
-            nutritionString += "fat=" + String(nutritionRanges.minimum.fat) + "-" + String(nutritionRanges.maximum.fat) + "&"
-            nutritionString += "nrg=" + String(nutritionRanges.minimum.nrg) + "-" +  String(nutritionRanges.maximum.nrg) + "&"
-            nutritionString += "sat=" + String(nutritionRanges.minimum.sat) + "-" + String(nutritionRanges.maximum.sat) + "&"
-            nutritionString += "sod=" + String(nutritionRanges.minimum.sod) + "-" + String(nutritionRanges.maximum.sod) + "&"
-            nutritionString += "sug=" + String(nutritionRanges.minimum.sug) + "-" + String(nutritionRanges.maximum.sug) + "&"
-            nutritionString += "pro=" + String(nutritionRanges.minimum.pro) + "-" + String(nutritionRanges.maximum.pro)
+            nutritionString += "fat=" + String(nutritionRanges.minimum.fat) + "_" + String(nutritionRanges.maximum.fat) + "&"
+            nutritionString += "nrg=" + String(nutritionRanges.minimum.nrg) + "_" +  String(nutritionRanges.maximum.nrg) + "&"
+            nutritionString += "sat=" + String(nutritionRanges.minimum.sat) + "_" + String(nutritionRanges.maximum.sat) + "&"
+            nutritionString += "sod=" + String(nutritionRanges.minimum.sod) + "_" + String(nutritionRanges.maximum.sod) + "&"
+            nutritionString += "sug=" + String(nutritionRanges.minimum.sug) + "_" + String(nutritionRanges.maximum.sug) + "&"
+            nutritionString += "pro=" + String(nutritionRanges.minimum.pro) + "_" + String(nutritionRanges.maximum.pro)
         } else {
             nutritionString = "none"
         }
@@ -249,7 +261,6 @@ class RecipeAPI {
                 print(error)
                 completion?(.failure(.unspecified))
             }
-            print(data)
             let decoder = JSONDecoder()
             do {
                 let http = urlresponse as! HTTPURLResponse
@@ -257,8 +268,14 @@ class RecipeAPI {
                     completion?(.failure(.usageLimitExceeded))
                     print("Usage Limit Exceeded")
                 }
-                let recipes = try decoder.decode([Recipe].self, from: data!)
-                completion?(.success(recipes))
+                let dictionary = try! JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                let missedCriteria = dictionary["not_met"] as! [String: Any]
+                let missed_nutrition = missedCriteria["nutrition"] as! [String: Float]
+                let missed_ingredients = missedCriteria["ingredients"] as! [String]
+                let result = dictionary["result"] as! [NSDictionary]
+                let result_data = try! JSONSerialization.data(withJSONObject: result, options: [])
+                let recipes = try decoder.decode([Recipe].self, from: result_data)
+                completion?(.success(MealPlanResponse(recipes: recipes, missing_nutrition: missed_nutrition, missing_ingredients: missed_ingredients)))
             } catch {
                 print(error)
             }
