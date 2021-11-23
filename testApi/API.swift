@@ -12,6 +12,12 @@ class MealPlanResponse {
         self.missing_ingredients = missing_ingredients
     }
 }
+struct Review: Codable {
+    var id : String
+    var username : String
+    var rating : Int
+    var text : String
+}
 
 public struct Recipe: Codable {
     //This is the recipe class which holds all relevant information about a recipe.
@@ -20,7 +26,7 @@ public struct Recipe: Codable {
     enum CodingKeys: String, CodingKey {
         case nutritionSummary = "fsa_lights_per100g"
         case ingredient_units = "unit"
-        case id, ingredients, instructions, nutr_per_ingredient, image_ids, nutr_values_per100g, title,url,weight_per_ingr
+        case id, ingredients, instructions, nutr_per_ingredient, image_ids, nutr_values_per100g, title,url,weight_per_ingr, likes, rating, num_of_reviews
     }
     
     //Assigns colors to four catagories of nutrition: Fat, Salt, Saturates, Sugars
@@ -44,6 +50,12 @@ public struct Recipe: Codable {
     var url : URL
     //Weight of each ingredient, coindexed with ingredients in "ingredients"
     var weight_per_ingr : [Double]
+    //Number of likes
+    var likes : Int
+    //Average star rating
+    var rating : Float
+    //Number of reviews
+    var num_of_reviews : Int
     public init(from decoder: Decoder) throws {
         let container =  try decoder.container(keyedBy: CodingKeys.self)
         nutritionSummary = try container.decode(Dictionary<String, String>.self, forKey: .nutritionSummary)
@@ -58,6 +70,9 @@ public struct Recipe: Codable {
         image_ids = try container.decode([String].self, forKey: .image_ids)
         weight_per_ingr = try container.decode([Double].self, forKey: .weight_per_ingr)
         nutr_values_per100g = try container.decode(Nutrition.self, forKey: .nutr_values_per100g)
+        likes = try container.decode(Int.self, forKey: .likes)
+        rating = try container.decode(Float.self, forKey: .rating)
+        num_of_reviews = try container.decode(Int.self, forKey: .num_of_reviews)
     }
     public func encode(to encoder: Encoder) throws {
         fatalError("not implemented yet")
@@ -276,6 +291,73 @@ class RecipeAPI {
                 let result_data = try! JSONSerialization.data(withJSONObject: result, options: [])
                 let recipes = try decoder.decode([Recipe].self, from: result_data)
                 completion?(.success(MealPlanResponse(recipes: recipes, missing_nutrition: missed_nutrition, missing_ingredients: missed_ingredients)))
+            } catch {
+                print(error)
+            }
+            
+        })
+        task.resume()
+    }
+    
+    //Method to post a rating/review of a recipe. Must include a rating, text of review is optional.
+    //If the user has already posted a review for that recipe, it will overwrite the preview review.
+    func makeReview(recipe: Recipe, rating: Int, review: String?,completion: ((Result<String,SignUpError>)->Void)?) {
+        let review = review ?? ""
+        validate_token()
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/rate_recipe")!)
+        let review_data = ["recipe_id":recipe.id, "rating": String(rating),"text":review]
+        request.httpMethod = "POST"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: review_data, options: [])
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            let dictionary = try! JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+            completion?(.success(dictionary["message"] as! String))
+            
+        })
+        task.resume()
+    }
+    
+    //Likes or unlikes a recipe, depending on whether user has previously liked the recipe
+    func toggleRecipeLike(recipe: Recipe, completion: ((Result<String,SignUpError>)->Void)?) {
+        validate_token()
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/toggle_like/\(recipe.id)")!)
+        request.httpMethod = "POST"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            let dictionary = try! JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+            completion?(.success(dictionary["message"] as! String))
+            
+        })
+        task.resume()
+    }
+    
+    //Retrieves all reviews for a given recipe. See Recipe struct for contents/syntax of a review. A recipe object returned from other views will include number of reviews and avg stars, but will not include the complete set of ratings, authors, and texts.
+    func getAllReviews(recipe: Recipe, completion: ((Result<[Review],SignUpError>)->Void)?) {
+        validate_token()
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/get_ratings/\(recipe.id)")!)
+        request.httpMethod = "GET"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            let decoder = JSONDecoder()
+            do {
+                let reviews = try decoder.decode([Review].self, from: data!)
+                completion?(.success(reviews))
             } catch {
                 print(error)
             }

@@ -62,13 +62,13 @@ class ViewController: UIViewController {
             imageViews[imageViews.count-1].bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         //Register new user on the RecipeAPi instance
-        RecipeAPI.shared.register(username: "alexander1243567891233111111111", password: "yay", completion: { result in
+        RecipeAPI.shared.register(username: "alexander12435678912331111111`Z", password: "yay", completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success:
                 //Login
-                RecipeAPI.shared.login(username: "alexander1243567891233111111111", password: "yay", completion: { result in
+                RecipeAPI.shared.login(username: "alexander12435678912331111111`Z", password: "yay", completion: { result in
                     switch result {
                     case .failure(let error):
                         print(error)
@@ -96,9 +96,36 @@ class ViewController: UIViewController {
                 print("missing nutrition: " + String(describing: failed_nutrition))
                 print("missing ingredients: " + String(describing: failed_ingredients))
                 let recipes = response.recipes
+                print(recipes)
                 var image : UIImage?
                     //Get the image for the first image in the first recipe retrieved in the previous search
                 for i in 0..<self.imageViews.count {
+                    RecipeAPI.shared.makeReview(recipe: recipes[i], rating: 1, review: recipes[i].title, completion: { result in
+                        switch result {
+                        case .failure(let error):
+                            print(error)
+                        case .success(let string):
+                            print(string)
+                        }
+                    })
+                    RecipeAPI.shared.toggleRecipeLike(recipe: recipes[i], completion: { result in
+                        switch result {
+                        case .failure(let error):
+                            print(error)
+                        case .success(let string):
+                            print(string)
+                        }
+                    })
+                    if i == 0 {
+                        RecipeAPI.shared.getAllReviews(recipe: recipes[i], completion: { result in
+                            switch result {
+                            case .failure(let error):
+                                print(error)
+                            case .success(let reviews):
+                                print(reviews)
+                            }
+                        })
+                    }
                     RecipeAPI.shared.getImage(id: recipes[i].image_ids[0], completion: { result in
                         switch result {
                         case .failure(let error):
