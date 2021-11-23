@@ -2,6 +2,23 @@ import UIKit
 
 import Foundation
 
+class MealPlanResponse {
+    var recipes : [Recipe]
+    var missing_nutrition : [String: Float]
+    var missing_ingredients : [String]
+    init(recipes : [Recipe], missing_nutrition: [String: Float], missing_ingredients: [String]) {
+        self.recipes = recipes
+        self.missing_nutrition = missing_nutrition
+        self.missing_ingredients = missing_ingredients
+    }
+}
+struct Review: Codable {
+    var id : String
+    var username : String
+    var rating : Int
+    var text : String
+}
+
 public struct Recipe: Codable {
     //This is the recipe class which holds all relevant information about a recipe.
     
@@ -9,7 +26,7 @@ public struct Recipe: Codable {
     enum CodingKeys: String, CodingKey {
         case nutritionSummary = "fsa_lights_per100g"
         case ingredient_units = "unit"
-        case id, ingredients, instructions, nutr_per_ingredient, image_ids, nutr_values_per100g, title,url,weight_per_ingr
+        case id, ingredients, instructions, nutr_per_ingredient, image_ids, nutr_values_per100g, title,url,weight_per_ingr, likes, rating, num_of_reviews
     }
     
     //Assigns colors to four catagories of nutrition: Fat, Salt, Saturates, Sugars
@@ -33,6 +50,12 @@ public struct Recipe: Codable {
     var url : URL
     //Weight of each ingredient, coindexed with ingredients in "ingredients"
     var weight_per_ingr : [Double]
+    //Number of likes
+    var likes : Int
+    //Average star rating
+    var rating : Float
+    //Number of reviews
+    var num_of_reviews : Int
     public init(from decoder: Decoder) throws {
         let container =  try decoder.container(keyedBy: CodingKeys.self)
         nutritionSummary = try container.decode(Dictionary<String, String>.self, forKey: .nutritionSummary)
@@ -47,6 +70,9 @@ public struct Recipe: Codable {
         image_ids = try container.decode([String].self, forKey: .image_ids)
         weight_per_ingr = try container.decode([Double].self, forKey: .weight_per_ingr)
         nutr_values_per100g = try container.decode(Nutrition.self, forKey: .nutr_values_per100g)
+        likes = try container.decode(Int.self, forKey: .likes)
+        rating = try container.decode(Float.self, forKey: .rating)
+        num_of_reviews = try container.decode(Int.self, forKey: .num_of_reviews)
     }
     public func encode(to encoder: Encoder) throws {
         fatalError("not implemented yet")
@@ -71,6 +97,22 @@ struct Nutrition: Codable {
     var sug : Double
 }
 
+struct OptionalNutrition: Codable {
+    var fat : Double = -1
+    var nrg : Double = -1
+    var pro : Double = -1
+    var sat : Double = -1
+    var sod : Double = -1
+    var sug : Double = -1
+}
+struct NutritionRange: Codable {
+    var minimum : OptionalNutrition
+    var maximum : OptionalNutrition
+    init(minimum: OptionalNutrition, maximum: OptionalNutrition) {
+        self.minimum = minimum
+        self.maximum = maximum
+    }
+}
 //Some errors for error reporting to user. Not fully implemented yet
 enum SignUpError : Error {
     case emailAlreadyInUse
@@ -85,7 +127,7 @@ class RecipeAPI {
     //Token for api acccess. Automatically renewed by the validateToken method
     private var token: String!
     private var loginTime : Date!
-    //Stores username and password for authentication
+    //Stores username and password for authentication. Refresh tokens --> user signs in two tokens. One is regular session token one is a refresh token. Session token expires in a week. Refresh in a month. Refresh can be used to create a new token... etc.
     private var username : String!
     private var password : String!
     //Shared instance. This is how the API should be accessed
@@ -202,6 +244,120 @@ class RecipeAPI {
                 } else {
                     print("couldn't decode image")
                 }
+            } catch {
+                print(error)
+            }
+            
+        })
+        task.resume()
+    }
+    
+    //Function makes a meal plan. Takes in a number of meals, string array of cuisine names, nutrition range constructed with two OptionalNutition objects minimum and maximum, and a string array of ingredients. Backend to return relevant recipes implemented to try to match constraints, will return recipes and constraints it does not match. Cuisines are taken as guidance but not guaranteed. They filter set of searched recipes, but response will not necessarily contain all cuisines. The completion has either an error or MealPlanResponse, which has recipes as well as criteria that were missed.
+    func makeMealPlan(numMeals: Int, cuisines: [String], nutritionRanges: NutritionRange?, ingredients: [String], completion: ((Result<MealPlanResponse,SignUpError>)->Void)?) {
+        validate_token()
+        //URL with params?
+        var nutritionString = ""
+        if let nutritionRanges = nutritionRanges {
+            nutritionString += "fat=" + String(nutritionRanges.minimum.fat) + "_" + String(nutritionRanges.maximum.fat) + "&"
+            nutritionString += "nrg=" + String(nutritionRanges.minimum.nrg) + "_" +  String(nutritionRanges.maximum.nrg) + "&"
+            nutritionString += "sat=" + String(nutritionRanges.minimum.sat) + "_" + String(nutritionRanges.maximum.sat) + "&"
+            nutritionString += "sod=" + String(nutritionRanges.minimum.sod) + "_" + String(nutritionRanges.maximum.sod) + "&"
+            nutritionString += "sug=" + String(nutritionRanges.minimum.sug) + "_" + String(nutritionRanges.maximum.sug) + "&"
+            nutritionString += "pro=" + String(nutritionRanges.minimum.pro) + "_" + String(nutritionRanges.maximum.pro)
+        } else {
+            nutritionString = "none"
+        }
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/make_meal_plan/meals=\(numMeals)&cuisine=\(cuisines.joined(separator: "-"))&nutrition=\(nutritionString)&ingredients=\(ingredients.joined(separator: "-"))")!)
+        request.httpMethod = "GET"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            let decoder = JSONDecoder()
+            do {
+                let http = urlresponse as! HTTPURLResponse
+                if http.statusCode == 403 {
+                    completion?(.failure(.usageLimitExceeded))
+                    print("Usage Limit Exceeded")
+                }
+                let dictionary = try! JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                let missedCriteria = dictionary["not_met"] as! [String: Any]
+                let missed_nutrition = missedCriteria["nutrition"] as! [String: Float]
+                let missed_ingredients = missedCriteria["ingredients"] as! [String]
+                let result = dictionary["result"] as! [NSDictionary]
+                let result_data = try! JSONSerialization.data(withJSONObject: result, options: [])
+                let recipes = try decoder.decode([Recipe].self, from: result_data)
+                completion?(.success(MealPlanResponse(recipes: recipes, missing_nutrition: missed_nutrition, missing_ingredients: missed_ingredients)))
+            } catch {
+                print(error)
+            }
+            
+        })
+        task.resume()
+    }
+    
+    //Method to post a rating/review of a recipe. Must include a rating, text of review is optional.
+    //If the user has already posted a review for that recipe, it will overwrite the preview review.
+    func makeReview(recipe: Recipe, rating: Int, review: String?,completion: ((Result<String,SignUpError>)->Void)?) {
+        let review = review ?? ""
+        validate_token()
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/rate_recipe")!)
+        let review_data = ["recipe_id":recipe.id, "rating": String(rating),"text":review]
+        request.httpMethod = "POST"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: review_data, options: [])
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            let dictionary = try! JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+            completion?(.success(dictionary["message"] as! String))
+            
+        })
+        task.resume()
+    }
+    
+    //Likes or unlikes a recipe, depending on whether user has previously liked the recipe
+    func toggleRecipeLike(recipe: Recipe, completion: ((Result<String,SignUpError>)->Void)?) {
+        validate_token()
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/toggle_like/\(recipe.id)")!)
+        request.httpMethod = "POST"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            let dictionary = try! JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+            completion?(.success(dictionary["message"] as! String))
+            
+        })
+        task.resume()
+    }
+    
+    //Retrieves all reviews for a given recipe. See Recipe struct for contents/syntax of a review. A recipe object returned from other views will include number of reviews and avg stars, but will not include the complete set of ratings, authors, and texts.
+    func getAllReviews(recipe: Recipe, completion: ((Result<[Review],SignUpError>)->Void)?) {
+        validate_token()
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/get_ratings/\(recipe.id)")!)
+        request.httpMethod = "GET"
+        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
+            if let error = error {
+                print(error)
+                completion?(.failure(.unspecified))
+            }
+            let decoder = JSONDecoder()
+            do {
+                let reviews = try decoder.decode([Review].self, from: data!)
+                completion?(.success(reviews))
             } catch {
                 print(error)
             }
