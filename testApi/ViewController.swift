@@ -62,7 +62,7 @@ class ViewController: UIViewController {
             imageViews[imageViews.count-1].bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         //Register new user on the RecipeAPi instance
-        RecipeAPI.shared.register(username: "alexander12435678912331111111`Z", password: "yay", completion: { result in
+        RecipeAPI.shared.register(username: "alexander12435678912331111111`Z", password: "yay", email: "alexanderHamilton@yahoo.com", completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -85,7 +85,7 @@ class ViewController: UIViewController {
     func finishLoading() {
         var response : MealPlanResponse!
         //Perform a search for recipes with the word thai in either title or ingredients
-        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["indonesian","thai","chinese","japanese","italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: -1, nrg: -1, pro: 17, sat: -1, sod: 0.15, sug: -1), maximum: OptionalNutrition(fat: -1, nrg: -1, pro: -1, sat: -1, sod: 0.3, sug: 15)), ingredients: ["pasta","tomato","tofu","green","noodle"], completion: { result in
+        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: -1, nrg: -1, pro: 17, sat: -1, sod: 0.15, sug: -1), maximum: OptionalNutrition(fat: -1, nrg: -1, pro: -1, sat: -1, sod: 0.3, sug: 15)), ingredients: ["pasta","basil"], completion: { result in
             switch result {
             case .failure(let error):
                 print(error)

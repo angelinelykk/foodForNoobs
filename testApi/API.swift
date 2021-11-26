@@ -133,8 +133,8 @@ class RecipeAPI {
     //Shared instance. This is how the API should be accessed
     static let shared = RecipeAPI()
     //Call register on the shared api object to register a new user. Optional completion gives a result with either an error or string which indicates sucesss
-    func register(username: String, password: String, completion: ((Result<String,SignUpError>)->Void)?) {
-        let user_data = ["username":username, "password": password]
+    func register(username: String, password: String, email: String, completion: ((Result<String,SignUpError>)->Void)?) {
+        let user_data = ["username":username, "password": password,"email":email]
         self.username = username
         self.password = password
         var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/register")!)
