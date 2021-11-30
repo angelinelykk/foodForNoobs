@@ -27,7 +27,12 @@ struct Review: Codable {
     var text : String
 }
 
-public struct Recipe: Codable {
+public struct Recipe: Codable, Hashable {
+    //Equatable conformance
+    public static func == (lhs: Recipe, rhs: Recipe) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     //This is the recipe class which holds all relevant information about a recipe.
     
     //Involved in decoding a recipe
@@ -39,6 +44,8 @@ public struct Recipe: Codable {
     
     //Assigns colors to four catagories of nutrition: Fat, Salt, Saturates, Sugars
     var nutritionSummary : Dictionary<String, String>
+    
+    var hashID = UUID().uuidString
     
     var id : String
     //A list of ingredients, each item is an ingredient
@@ -87,6 +94,10 @@ public struct Recipe: Codable {
     }
     public func encode(to encoder: Encoder) throws {
         fatalError("not implemented yet")
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(hashID)
     }
 }
 public struct RecipeNoNutrition : Codable {

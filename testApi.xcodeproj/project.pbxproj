@@ -24,6 +24,9 @@
 		D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */; };
 		D6CD44252753F78E00ACA18F /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441E2753F78E00ACA18F /* AuthTextField.swift */; };
 		D6CD44272753F7F600ACA18F /* AddRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD44262753F7F600ACA18F /* AddRecipe.swift */; };
+		E3F8FBC72756D51A00FEFD79 /* BrowseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F8FBC62756D51A00FEFD79 /* BrowseVC.swift */; };
+		E3F8FBC92756D57F00FEFD79 /* RecipeCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F8FBC82756D57F00FEFD79 /* RecipeCategories.swift */; };
+		E3F8FBCB2756DBA900FEFD79 /* BrowseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F8FBCA2756DBA900FEFD79 /* BrowseCollectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +68,9 @@
 		D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		D6CD441E2753F78E00ACA18F /* AuthTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
 		D6CD44262753F7F600ACA18F /* AddRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipe.swift; sourceTree = "<group>"; };
+		E3F8FBC62756D51A00FEFD79 /* BrowseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVC.swift; sourceTree = "<group>"; };
+		E3F8FBC82756D57F00FEFD79 /* RecipeCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategories.swift; sourceTree = "<group>"; };
+		E3F8FBCA2756DBA900FEFD79 /* BrowseCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseCollectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,7 @@
 				D6C26D5D2741C7E800406DB3 /* API.swift */,
 				D6C26D2F2741C7D900406DB3 /* SceneDelegate.swift */,
 				D6CD441E2753F78E00ACA18F /* AuthTextField.swift */,
+				E3F8FBC52756D44D00FEFD79 /* BrowseUI */,
 				D6CD441A2753F78E00ACA18F /* AuthUI */,
 				D6CD441B2753F78E00ACA18F /* LabelledTextView.swift */,
 				D6CD44192753F78E00ACA18F /* UIColor+ColorScheme.swift */,
@@ -149,6 +156,16 @@
 				D6C26D502741C7DD00406DB3 /* testApiUITestsLaunchTests.swift */,
 			);
 			path = testApiUITests;
+			sourceTree = "<group>";
+		};
+		E3F8FBC52756D44D00FEFD79 /* BrowseUI */ = {
+			isa = PBXGroup;
+			children = (
+				E3F8FBC62756D51A00FEFD79 /* BrowseVC.swift */,
+				E3F8FBCA2756DBA900FEFD79 /* BrowseCollectionCell.swift */,
+				E3F8FBC82756D57F00FEFD79 /* RecipeCategories.swift */,
+			);
+			path = BrowseUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,11 +303,14 @@
 				D6CD44272753F7F600ACA18F /* AddRecipe.swift in Sources */,
 				D6C26D322741C7D900406DB3 /* ViewController.swift in Sources */,
 				D6CD44252753F78E00ACA18F /* AuthTextField.swift in Sources */,
+				E3F8FBC92756D57F00FEFD79 /* RecipeCategories.swift in Sources */,
 				D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */,
 				D6C26D2E2741C7D900406DB3 /* AppDelegate.swift in Sources */,
 				D6CD441F2753F78E00ACA18F /* LoadingButton.swift in Sources */,
 				D6C26D5E2741C7E800406DB3 /* API.swift in Sources */,
 				D6CD44202753F78E00ACA18F /* UIColor+ColorScheme.swift in Sources */,
+				E3F8FBC72756D51A00FEFD79 /* BrowseVC.swift in Sources */,
+				E3F8FBCB2756DBA900FEFD79 /* BrowseCollectionCell.swift in Sources */,
 				D6C26D302741C7D900406DB3 /* SceneDelegate.swift in Sources */,
 				D6CD44222753F78E00ACA18F /* LabelledTextView.swift in Sources */,
 			);
