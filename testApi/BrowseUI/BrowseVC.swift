@@ -93,20 +93,20 @@ extension BrowseVC {
     
     func configureDataSource() {
         
-        let cellRegistration = UICollectionView.CellRegistration<SymbolCollectionCell, SFSymbol> {
+        let cellRegistration = UICollectionView.CellRegistration<BrowseCollectionCell, Recipe> {
             (cell, indexPath, identifier) in
-            cell.symbol = identifier
+            cell.recipe = identifier
         }
         
-        let headerRegistration = UICollectionView.SupplementaryRegistration<TitleSupplementaryView>(elementKind: SymbolCollectionVC.headerElementKind) { headerView, elementKind, indexPath in
+        let headerRegistration = UICollectionView.SupplementaryRegistration<TitleSupplementaryView>(elementKind: BrowseVC.headerElementKind) { headerView, elementKind, indexPath in
             guard let section = Section(index: indexPath.section) else {
                 fatalError("Unknown section")
             }
             headerView.label.text = section.rawValue
         }
         
-        dataSource = UICollectionViewDiffableDataSource<Section, SFSymbol>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, identifier: SFSymbol) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Recipe>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, identifier: Recipe) -> UICollectionViewCell? in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
         }
         
@@ -118,9 +118,9 @@ extension BrowseVC {
         dataSource.apply(genereateSnapshot(), animatingDifferences: false)
     }
     
-    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, SFSymbol> {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SFSymbol>()
-        SymbolCategories.allCases.forEach { category in
+    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, Recipe> {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Recipe>()
+        RecipeCategories.allCases.forEach { category in
             guard let items = SymbolProvider.symbols?[category] else {
                 fatalError("Unknown category")
             }

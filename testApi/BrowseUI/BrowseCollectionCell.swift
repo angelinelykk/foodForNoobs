@@ -14,8 +14,17 @@ class BrowseCollectionCell: UICollectionViewCell {
     
     var recipe: Recipe? {
         didSet {
-            imageView.image = recipe?.image
-            titleView.text = symbol?.name
+            RecipeAPI.shared.getImage(id: recipe!.image_ids[0], completion: { result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let im):
+                    DispatchQueue.main.sync {
+                        self.imageView.image = im
+                    }
+                }
+            })
+            titleView.text = recipe?.title
         }
     }
     
