@@ -16,11 +16,11 @@ class BrowseVC: UIViewController {
     
     var collectionView: UICollectionView!
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, RecipeNoNutrition>!
+    var dataSource: UICollectionViewDiffableDataSource<Section, Recipe>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemRed
+        view.backgroundColor = .systemBackground
         
         configureViews()
         configureDataSource()
@@ -93,7 +93,7 @@ extension BrowseVC {
     
     func configureDataSource() {
         
-        let cellRegistration = UICollectionView.CellRegistration<BrowseCollectionCell, RecipeNoNutrition> {
+        let cellRegistration = UICollectionView.CellRegistration<BrowseCollectionCell, Recipe> {
             (cell, indexPath, identifier) in
             cell.recipe = identifier
         }
@@ -105,8 +105,8 @@ extension BrowseVC {
             headerView.label.text = section.rawValue
         }
         
-        dataSource = UICollectionViewDiffableDataSource<Section, RecipeNoNutrition>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, identifier: RecipeNoNutrition) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Recipe>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, identifier: Recipe) -> UICollectionViewCell? in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
         }
         
@@ -118,20 +118,6 @@ extension BrowseVC {
 //        dataSource.apply(genereateSnapshot(), animatingDifferences: false)
     }
     
-<<<<<<< HEAD:testApi/BrowseVC.swift
-    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition> {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition>()
-        RecipeCategories.allCases.forEach { category in
-            guard let items = RecipeProvider.recipes?[category] else {
-                fatalError("Unknown category")
-            }
-            snapshot.appendSections([category])
-            snapshot.appendItems(items)
-        }
-        
-        return snapshot
-    }
-=======
 //    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, Recipe> {
 //        var snapshot = NSDiffableDataSourceSnapshot<Section, Recipe>()
 //        RecipeCategories.allCases.forEach { category in
@@ -144,7 +130,6 @@ extension BrowseVC {
 //
 //        return snapshot
 //    }
->>>>>>> d5a8c9af33be6744bf5622cdbbd410e9a7615049:testApi/Views/BrowseUI/BrowseVC.swift
 }
 
 

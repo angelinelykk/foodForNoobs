@@ -31,7 +31,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         for imageView in imageViews {
@@ -62,7 +61,7 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             imageViews[imageViews.count-1].bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        Register new user on the RecipeAPi instance
+        //Register new user on the RecipeAPi instance
         RecipeAPI.shared.register(username: "test53441456", password: "yay", email: "test53441456@e.com", completion: { result in
             switch result {
             case .failure(let error):
@@ -80,12 +79,12 @@ class ViewController: UIViewController {
                 })
             }
         })
+        
     }
     
     func finishLoading() {
         //Perform a search for recipes with the word thai in either title or ingredients
         //RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: -1, nrg: -1, pro: 17, sat: -1, sod: 0.15, sug: -1), maximum: OptionalNutrition(fat: -1, nrg: -1, pro: -1, sat: -1, sod: 0.3, sug: 15)), ingredients: ["pasta","basil"], completion: { result in
-        
         RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["Recipe"], ingredients: ["Alexander Hamilton"], completion: { result in
             switch result {
             case .failure(let error):
