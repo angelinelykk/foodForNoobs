@@ -100,7 +100,7 @@ public struct Recipe: Codable, Hashable {
         hasher.combine(hashID)
     }
 }
-public struct RecipeNoNutrition : Codable {
+public struct RecipeNoNutrition : Codable, Hashable {
     var id : String
     //A list of ingredients, each item is an ingredient
     var ingredients : [Dictionary<String, String>]
@@ -115,6 +115,18 @@ public struct RecipeNoNutrition : Codable {
     var rating : Float
     //Number of reviews
     var num_of_reviews : Int
+    
+    //Hashable conformance
+    var hashID = UUID().uuidString
+        
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(hashID)
+    }
+        
+    //Equatable conformance
+    public static func == (lhs: RecipeNoNutrition, rhs: RecipeNoNutrition) -> Bool {
+        return lhs.id == rhs.id
+    }
     
     init(id: String, ingredients: [String], instructions: [String], title : String, image_ids : [String]) {
         self.id = id
