@@ -187,6 +187,7 @@ enum SignUpError : Error {
     case emailAlreadyInUse
     case errorWritingToDatabase
     case weakPassword
+    case invalidPassword
     case usageLimitExceeded
     case unspecified
 }
@@ -222,7 +223,7 @@ class RecipeAPI {
         })
         task.resume()
     }
-    //Call login on the shared object to login a user and save a new token for authentication.
+    //Call login on the shared object to login a user and save a new token for authentication. Returns completion with string "success" if sucessful, invalid password if not sucessful.
     func login(username: String, password: String, completion: ((Result<String,SignUpError>)->Void)?) {
         let user_data_string = username + ":" + password
         let data = user_data_string.data(using: String.Encoding.utf8)
@@ -239,8 +240,13 @@ class RecipeAPI {
             }
             self.loginTime = Date.now
             let dictionary = try! JSONSerialization.jsonObject(with: data!) as! Dictionary<String,AnyObject>
-            self.token = dictionary["token"] as! String
-            completion?(.success(dictionary["token"] as! String))
+            if let token = dictionary["token"] as? String {
+                self.token = token
+                completion?(.success("success"))
+            } else {
+                completion?(.failure(.invalidPassword))
+            }
+            
         })
         task.resume()
     }

@@ -17,7 +17,7 @@ struct RegisterView : View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
-        NavigationView {
+        NavigationView() {
             VStack {
                 Spacer()
                 AppTitleText()
@@ -50,7 +50,30 @@ struct RegisterView : View {
                         .background(lightGreyColor)
                         .cornerRadius(5.0)
                         .padding(.bottom, 20)
-                    Button(action: {print("Button tapped")}) {
+                    Button(action: {
+                        RecipeAPI.shared.register(
+                            username: username,
+                            password: password,
+                            email: email,
+                            completion: { result in
+                                if case .success = result {
+                                    RecipeAPI.shared.login(
+                                        username: username,
+                                        password: password,
+                                        completion: { result in
+                                            if case .success = result {
+                                                LoginState.shared.loggedIn = true
+                                            } else {
+                                            
+                                            }
+                                        }
+                                    )
+                                } else {
+                                    
+                                }
+                            }
+                        )
+                    }) {
                        RegisterButtonContent()
                     }
                     Button(action: {

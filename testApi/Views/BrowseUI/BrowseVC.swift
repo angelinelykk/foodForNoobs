@@ -118,7 +118,7 @@ extension BrowseVC {
 //        dataSource.apply(genereateSnapshot(), animatingDifferences: false)
     }
     
-
+<<<<<<< HEAD:testApi/BrowseVC.swift
     func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition> {
         var snapshot = NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition>()
         RecipeCategories.allCases.forEach { category in
@@ -131,7 +131,20 @@ extension BrowseVC {
         
         return snapshot
     }
-
+=======
+//    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, Recipe> {
+//        var snapshot = NSDiffableDataSourceSnapshot<Section, Recipe>()
+//        RecipeCategories.allCases.forEach { category in
+//            guard let items = SymbolProvider.symbols?[category] else {
+//                fatalError("Unknown category")
+//            }
+//            snapshot.appendSections([category])
+//            snapshot.appendItems(items)
+//        }
+//
+//        return snapshot
+//    }
+>>>>>>> d5a8c9af33be6744bf5622cdbbd410e9a7615049:testApi/Views/BrowseUI/BrowseVC.swift
 }
 
 

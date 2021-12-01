@@ -11,7 +11,7 @@ struct ResetPasswordView : View {
     @State var email: String = ""
     
     var body: some View {
-        NavigationView {
+        NavigationView() {
             VStack(alignment: .center) {
                 Spacer()
                 ForgotPasswordText()

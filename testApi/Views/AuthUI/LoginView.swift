@@ -45,7 +45,17 @@ struct LoginView : View {
                     .cornerRadius(5.0)
                     .padding(.bottom, 20)
                 Button(action: {
-                    API
+                    RecipeAPI.shared.login(
+                        username: username,
+                        password: password,
+                        completion: { result in
+                            if case .success = result {
+                                LoginState.shared.loggedIn = true
+                            } else {
+                            
+                            }
+                        }
+                    )
                 }) {
                    LoginButtonContent()
                 }
