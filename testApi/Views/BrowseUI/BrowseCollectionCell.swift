@@ -59,10 +59,10 @@ class BrowseCollectionCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 45),
             imageView.bottomAnchor.constraint(equalTo: titleView.topAnchor, constant: -7),
             titleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
     

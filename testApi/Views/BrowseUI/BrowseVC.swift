@@ -69,15 +69,15 @@ extension BrowseVC {
     func createLayout() -> UICollectionViewLayout {
         
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.interSectionSpacing = 40
+        config.interSectionSpacing = 16
         
         let layout = UICollectionViewCompositionalLayout(sectionProvider: {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let category = Section(index: sectionIndex) else { fatalError("Unknown section kind") }
             
-            let itemsPerRow = 4
-            let rowHeight: CGFloat = 70.0
-            let rowSpacing: CGFloat = 35
+            let itemsPerRow = 2
+            let rowHeight: CGFloat = 0.75*(self.view.frame.width/2)
+            let rowSpacing: CGFloat = 16
             let headerEstimatedHeight: CGFloat = 44
             
             let item = NSCollectionLayoutItem(
