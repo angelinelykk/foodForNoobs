@@ -29,36 +29,38 @@ class BrowseVC: UIViewController {
                 print(error)
             case .success(let r):
                 self.recipes[RecipeCategories.topSection] = r
+                //fill best under 15
+                let beef: [String] = ["beef"]
+                let ingredients: [String] = ["ingredients"]
+                RecipeAPI.shared.search(searchTerms: beef, criteria: ingredients, has_nutrition: false, completion: {
+                    result in
+                    switch result {
+                    case .failure(let error):
+                        print(error)
+                    case .success(let r):
+                        self.recipes[RecipeCategories.bestUnder15Mins] = r
+                        // fill recommended
+                        let recommended: [String] = ["chicken"]
+                        RecipeAPI.shared.search(searchTerms: recommended, criteria: ingredients, has_nutrition: false, completion: {
+                            result in
+                            switch result {
+                            case .failure(let error):
+                                print(error)
+                            case .success(let r):
+                                self.recipes[RecipeCategories.suggestedByCreators] = r
+                                DispatchQueue.main.sync {
+                                    self.configureViews()
+                                    self.configureDataSource()
+                                }
+                            }
+                        })
+                    }
+                })
             }
         })
         
-        //fill best under 15
-        let beef: [String] = ["beef"]
-        let ingredients: [String] = ["ingredients"]
-        RecipeAPI.shared.search(searchTerms: beef, criteria: ingredients, has_nutrition: false, completion: {
-            result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let r):
-                self.recipes[RecipeCategories.bestUnder15Mins] = r
-            }
-        })
-        // fill recommended
-        let recommended: [String] = ["chicken"]
-        RecipeAPI.shared.search(searchTerms: recommended, criteria: ingredients, has_nutrition: false, completion: {
-            result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let r):
-                self.recipes[RecipeCategories.suggestedByCreators] = r
-                self.configureViews()
-                self.configureDataSource()
-            }
-        })
-        self.configureViews()
-        self.configureDataSource()
+        //self.configureViews()
+        //self.configureDataSource()
         
     }
 }

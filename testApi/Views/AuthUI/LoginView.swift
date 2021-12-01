@@ -50,7 +50,9 @@ struct LoginView : View {
                         password: password,
                         completion: { result in
                             if case .success = result {
-                                LoginState.shared.loggedIn = true
+                                DispatchQueue.main.sync {
+                                    LoginState.shared.loggedIn = true
+                                }
                             } else {
                             
                             }

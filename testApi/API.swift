@@ -45,7 +45,7 @@ public struct Recipe: Codable, Hashable {
     //Assigns colors to four catagories of nutrition: Fat, Salt, Saturates, Sugars
     var nutritionSummary : Dictionary<String, String>
     
-    var hashID = UUID().uuidString
+    //var hashID = UUID().uuidString
     
     var id : String
     //A list of ingredients, each item is an ingredient
@@ -96,9 +96,9 @@ public struct Recipe: Codable, Hashable {
         fatalError("not implemented yet")
     }
     
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(hashID)
-    }
+    //public func hash(into hasher: inout Hasher) {
+    //    hasher.combine(hashID)
+    //}
 }
 public struct RecipeNoNutrition : Codable, Hashable {
     var id : String
@@ -116,12 +116,13 @@ public struct RecipeNoNutrition : Codable, Hashable {
     //Number of reviews
     var num_of_reviews : Int
     
+    
     //Hashable conformance
-    var hashID = UUID().uuidString
+    //var hashID = UUID().uuidString
         
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(hashID)
-    }
+    //public func hash(into hasher: inout Hasher) {
+    //    hasher.combine(hashID)
+    //}
         
     //Equatable conformance
     public static func == (lhs: RecipeNoNutrition, rhs: RecipeNoNutrition) -> Bool {
@@ -157,7 +158,7 @@ func getValues(dicts: [Dictionary<String, String>]) -> [String] {
 }
 
 //Nutrition class. Fat correspnds to fat, nrg calories, pro is protein, sat is saturated fast, sod is sodium, and sug is sugar
-struct Nutrition: Codable {
+struct Nutrition: Codable, Hashable {
     var fat : Double
     var nrg : Double
     var pro : Double
