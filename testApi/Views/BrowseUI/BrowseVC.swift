@@ -17,13 +17,49 @@ class BrowseVC: UIViewController {
     var collectionView: UICollectionView!
     
     var dataSource: UICollectionViewDiffableDataSource<Section, RecipeNoNutrition>!
+    
+    var recipes: [RecipeCategories: [RecipeNoNutrition]] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemRed
+        view.backgroundColor = .systemBackground
+        RecipeAPI.shared.getMostLikedRecipes(number: 20, completion: { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let r):
+                self.recipes[RecipeCategories.topSection] = r
+            }
+        })
         
-        configureViews()
-        configureDataSource()
+        //fill best under 15
+        let beef: [String] = ["beef"]
+        let ingredients: [String] = ["ingredients"]
+        RecipeAPI.shared.search(searchTerms: beef, criteria: ingredients, has_nutrition: false, completion: {
+            result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let r):
+                self.recipes[RecipeCategories.bestUnder15Mins] = r
+            }
+        })
+        // fill recommended
+        let recommended: [String] = ["chicken"]
+        RecipeAPI.shared.search(searchTerms: recommended, criteria: ingredients, has_nutrition: false, completion: {
+            result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let r):
+                self.recipes[RecipeCategories.suggestedByCreators] = r
+                self.configureViews()
+                self.configureDataSource()
+            }
+        })
+        self.configureViews()
+        self.configureDataSource()
+        
     }
 }
 
@@ -121,7 +157,7 @@ extension BrowseVC {
     func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition> {
         var snapshot = NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition>()
         RecipeCategories.allCases.forEach { category in
-            guard let items = RecipeProvider.recipes?[category] else {
+            guard let items = self.recipes[category] else {
                 fatalError("Unknown category")
             }
             snapshot.appendSections([category])

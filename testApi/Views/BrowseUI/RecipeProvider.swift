@@ -9,20 +9,16 @@ import Foundation
 import UIKit
 
 class RecipeProvider {
-    static var topSection: [RecipeNoNutrition] = []
-    static var bestUnder15: [RecipeNoNutrition] = []
-    static var recommendedByCreators: [RecipeNoNutrition] = []
-    static let recipes: [RecipeCategories: [RecipeNoNutrition]]? = {
-        //fill top section
-        
-        var r: [RecipeCategories: [RecipeNoNutrition]] = [:]
+    static var recipes: [RecipeCategories: [RecipeNoNutrition]] = [:]
+    
+    static func getRecipesWithCategories() {
         
         RecipeAPI.shared.getMostLikedRecipes(number: 20, completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
-            case .success(let recipes):
-                topSection = recipes
+            case .success(let r):
+                recipes[RecipeCategories.topSection] = r
             }
         })
         
@@ -34,8 +30,8 @@ class RecipeProvider {
             switch result {
             case .failure(let error):
                 print(error)
-            case .success(let recipes):
-                bestUnder15 = recipes
+            case .success(let r):
+                recipes[RecipeCategories.bestUnder15Mins] = r
             }
         })
         // fill recommended
@@ -45,15 +41,12 @@ class RecipeProvider {
             switch result {
             case .failure(let error):
                 print(error)
-            case .success(let recipes):
-                recommendedByCreators = recipes
+            case .success(let r):
+                recipes[RecipeCategories.suggestedByCreators] = r
+                
             }
         })
         
-        r[RecipeCategories.topSection] = topSection
-        r[RecipeCategories.bestUnder15Mins] = bestUnder15
-        r[RecipeCategories.suggestedByCreators] = recommendedByCreators
-        return r
-        
-    }()
+    }
+
 }
