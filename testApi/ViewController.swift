@@ -62,13 +62,13 @@ class ViewController: UIViewController {
             imageViews[imageViews.count-1].bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         //Register new user on the RecipeAPi instance
-        RecipeAPI.shared.register(username: "alexander12435678912331111111`Z", password: "yay", email: "alexanderHamilton@yahoo.com", completion: { result in
+        RecipeAPI.shared.register(username: "test53441456", password: "yay", email: "test53441456@e.com", completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success:
                 //Login
-                RecipeAPI.shared.login(username: "alexander12435678912331111111`Z", password: "yay", completion: { result in
+                RecipeAPI.shared.login(username: "test53441456", password: "yay", completion: { result in
                     switch result {
                     case .failure(let error):
                         print(error)
@@ -83,24 +83,24 @@ class ViewController: UIViewController {
     }
     
     func finishLoading() {
-        var response : MealPlanResponse!
         //Perform a search for recipes with the word thai in either title or ingredients
-        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: -1, nrg: -1, pro: 17, sat: -1, sod: 0.15, sug: -1), maximum: OptionalNutrition(fat: -1, nrg: -1, pro: -1, sat: -1, sod: 0.3, sug: 15)), ingredients: ["pasta","basil"], completion: { result in
+        //RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: -1, nrg: -1, pro: 17, sat: -1, sod: 0.15, sug: -1), maximum: OptionalNutrition(fat: -1, nrg: -1, pro: -1, sat: -1, sod: 0.3, sug: 15)), ingredients: ["pasta","basil"], completion: { result in
+        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["Recipe"], ingredients: ["Alexander Hamilton"], completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success(let data):
-                response = data
-                let failed_nutrition = response.missing_nutrition
+                var response = data
+                //let failed_nutrition = response.missing_nutrition
                 let failed_ingredients = response.missing_ingredients
-                print("missing nutrition: " + String(describing: failed_nutrition))
+                //print("missing nutrition: " + String(describing: failed_nutrition))
                 print("missing ingredients: " + String(describing: failed_ingredients))
                 let recipes = response.recipes
                 print(recipes)
                 var image : UIImage?
                     //Get the image for the first image in the first recipe retrieved in the previous search
                 for i in 0..<self.imageViews.count {
-                    RecipeAPI.shared.makeReview(recipe: recipes[i], rating: 1, review: recipes[i].title, completion: { result in
+                    RecipeAPI.shared.makeReview(recipe_id: recipes[i].id, rating: 1, review: recipes[i].title, completion: { result in
                         switch result {
                         case .failure(let error):
                             print(error)
@@ -108,7 +108,7 @@ class ViewController: UIViewController {
                             print(string)
                         }
                     })
-                    RecipeAPI.shared.toggleRecipeLike(recipe: recipes[i], completion: { result in
+                    RecipeAPI.shared.toggleRecipeLike(recipe_id: recipes[i].id, completion: { result in
                         switch result {
                         case .failure(let error):
                             print(error)
@@ -117,7 +117,7 @@ class ViewController: UIViewController {
                         }
                     })
                     if i == 0 {
-                        RecipeAPI.shared.getAllReviews(recipe: recipes[i], completion: { result in
+                        RecipeAPI.shared.getAllReviews(recipe_id: recipes[i].id, completion: { result in
                             switch result {
                             case .failure(let error):
                                 print(error)
@@ -135,6 +135,15 @@ class ViewController: UIViewController {
                                 self.imageViews[i].image = im
                             }
                         }
+                    })
+                    RecipeAPI.shared.getMostLikedRecipes(number: 4, completion: { result in
+                        switch result {
+                        case .failure(let error):
+                            print(error)
+                        case .success(let recipes):
+                            print(recipes)
+                        }
+                        
                     })
                 }
             }
