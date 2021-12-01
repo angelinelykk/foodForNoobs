@@ -11,15 +11,15 @@ import SwiftUI
 struct AppNavigationView: View {
     var body: some View {
         TabView {
-            Text("Home")
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
-                }
             BrowseSwiftUI()
                 .tabItem {
                     Image(systemName: "star")
                     Text("Browse")
+                }
+            AddRecipe()
+                .tabItem {
+                    Image(systemName: "plus.circle")
+                    Text("Add Recipe")
                 }
             ProfileView()
                 .tabItem {
