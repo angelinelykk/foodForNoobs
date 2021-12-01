@@ -115,23 +115,22 @@ extension BrowseVC {
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
         }
         
-        dataSource.apply(genereateSnapshot(), animatingDifferences: false)
+//        dataSource.apply(genereateSnapshot(), animatingDifferences: false)
     }
     
-    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, Recipe> {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Recipe>()
-        RecipeCategories.allCases.forEach { category in
-            guard let items = SymbolProvider.symbols?[category] else {
-                fatalError("Unknown category")
-            }
-            snapshot.appendSections([category])
-            snapshot.appendItems(items)
-        }
-        
-        return snapshot
-    }
+//    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, Recipe> {
+//        var snapshot = NSDiffableDataSourceSnapshot<Section, Recipe>()
+//        RecipeCategories.allCases.forEach { category in
+//            guard let items = SymbolProvider.symbols?[category] else {
+//                fatalError("Unknown category")
+//            }
+//            snapshot.appendSections([category])
+//            snapshot.appendItems(items)
+//        }
+//
+//        return snapshot
+//    }
 }
 
 
-    
 
