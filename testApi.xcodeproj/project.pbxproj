@@ -24,6 +24,7 @@
 		D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */; };
 		D6CD44252753F78E00ACA18F /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441E2753F78E00ACA18F /* AuthTextField.swift */; };
 		D6CD44272753F7F600ACA18F /* AddRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD44262753F7F600ACA18F /* AddRecipe.swift */; };
+		E365AB96275716B300187B8A /* RecipeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E365AB95275716B300187B8A /* RecipeProvider.swift */; };
 		E3F8FBC72756D51A00FEFD79 /* BrowseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F8FBC62756D51A00FEFD79 /* BrowseVC.swift */; };
 		E3F8FBC92756D57F00FEFD79 /* RecipeCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F8FBC82756D57F00FEFD79 /* RecipeCategories.swift */; };
 		E3F8FBCB2756DBA900FEFD79 /* BrowseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F8FBCA2756DBA900FEFD79 /* BrowseCollectionCell.swift */; };
@@ -69,6 +70,7 @@
 		D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		D6CD441E2753F78E00ACA18F /* AuthTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
 		D6CD44262753F7F600ACA18F /* AddRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipe.swift; sourceTree = "<group>"; };
+		E365AB95275716B300187B8A /* RecipeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeProvider.swift; sourceTree = "<group>"; };
 		E3F8FBC62756D51A00FEFD79 /* BrowseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVC.swift; sourceTree = "<group>"; };
 		E3F8FBC82756D57F00FEFD79 /* RecipeCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategories.swift; sourceTree = "<group>"; };
 		E3F8FBCA2756DBA900FEFD79 /* BrowseCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseCollectionCell.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				D6CD44182753F78E00ACA18F /* LoadingButton.swift */,
 				D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */,
 				D6C26D312741C7D900406DB3 /* ViewController.swift */,
+				E3F8FBC62756D51A00FEFD79 /* BrowseVC.swift */,
 				D6C26D332741C7D900406DB3 /* Main.storyboard */,
 				D6C26D362741C7DC00406DB3 /* Assets.xcassets */,
 				D6C26D382741C7DC00406DB3 /* LaunchScreen.storyboard */,
@@ -163,7 +166,7 @@
 		E3F8FBC52756D44D00FEFD79 /* BrowseUI */ = {
 			isa = PBXGroup;
 			children = (
-				E3F8FBC62756D51A00FEFD79 /* BrowseVC.swift */,
+				E365AB95275716B300187B8A /* RecipeProvider.swift */,
 				E3F8FBCC2756E19900FEFD79 /* TitleSupplementaryView.swift */,
 				E3F8FBCA2756DBA900FEFD79 /* BrowseCollectionCell.swift */,
 				E3F8FBC82756D57F00FEFD79 /* RecipeCategories.swift */,
@@ -307,6 +310,7 @@
 				D6C26D322741C7D900406DB3 /* ViewController.swift in Sources */,
 				D6CD44252753F78E00ACA18F /* AuthTextField.swift in Sources */,
 				E3F8FBCD2756E19900FEFD79 /* TitleSupplementaryView.swift in Sources */,
+				E365AB96275716B300187B8A /* RecipeProvider.swift in Sources */,
 				E3F8FBC92756D57F00FEFD79 /* RecipeCategories.swift in Sources */,
 				D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */,
 				D6C26D2E2741C7D900406DB3 /* AppDelegate.swift in Sources */,

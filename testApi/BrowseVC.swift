@@ -16,11 +16,11 @@ class BrowseVC: UIViewController {
     
     var collectionView: UICollectionView!
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, Recipe>!
+    var dataSource: UICollectionViewDiffableDataSource<Section, RecipeNoNutrition>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemRed
         
         configureViews()
         configureDataSource()
@@ -93,7 +93,7 @@ extension BrowseVC {
     
     func configureDataSource() {
         
-        let cellRegistration = UICollectionView.CellRegistration<BrowseCollectionCell, Recipe> {
+        let cellRegistration = UICollectionView.CellRegistration<BrowseCollectionCell, RecipeNoNutrition> {
             (cell, indexPath, identifier) in
             cell.recipe = identifier
         }
@@ -105,8 +105,8 @@ extension BrowseVC {
             headerView.label.text = section.rawValue
         }
         
-        dataSource = UICollectionViewDiffableDataSource<Section, Recipe>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, identifier: Recipe) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, RecipeNoNutrition>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, identifier: RecipeNoNutrition) -> UICollectionViewCell? in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
         }
         
@@ -118,10 +118,10 @@ extension BrowseVC {
         dataSource.apply(genereateSnapshot(), animatingDifferences: false)
     }
     
-    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, Recipe> {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Recipe>()
+    func genereateSnapshot() -> NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition> {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, RecipeNoNutrition>()
         RecipeCategories.allCases.forEach { category in
-            guard let items = SymbolProvider.symbols?[category] else {
+            guard let items = RecipeProvider.recipes?[category] else {
                 fatalError("Unknown category")
             }
             snapshot.appendSections([category])
