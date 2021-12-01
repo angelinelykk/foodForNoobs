@@ -12,7 +12,7 @@ class BrowseCollectionCell: UICollectionViewCell {
     
     static let reuseIdentifier: String = String(describing: BrowseCollectionCell.self)
     
-    var recipe: Recipe? {
+    var recipe: RecipeNoNutrition? {
         didSet {
             RecipeAPI.shared.getImage(id: recipe!.image_ids[0], completion: { result in
                 switch result {
@@ -70,4 +70,3 @@ class BrowseCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
