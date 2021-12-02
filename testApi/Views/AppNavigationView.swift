@@ -16,6 +16,11 @@ struct AppNavigationView: View {
                     Image(systemName: "star")
                     Text("Browse")
                 }
+            SearchSwiftUI()
+                .tabItem {
+                    Image(systemName: "search")
+                    Text("Search")
+                }
             AddRecipe()
                 .tabItem {
                     Image(systemName: "plus.circle")
@@ -26,6 +31,7 @@ struct AppNavigationView: View {
                     Image(systemName: "person")
                     Text("Profile")
                 }
+
         }
     }
 }

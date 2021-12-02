@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 enum RecipeCategories: String, CaseIterable {
-    case trending = "Trending Recipes"
-    case thanksgiving = "Thanksgiving Ideas"
-    case quickAndEasy = "Quick and Easy Recipes"
+    case topSection = "Top Section"
+    case suggestedByCreators = "Suggested by the Creators"
+    case bestUnder15Mins = "Best under 15 minutes"
     
     init?(index: Int) {
         guard index < RecipeCategories.allCases.count else { return nil }
@@ -20,19 +20,19 @@ enum RecipeCategories: String, CaseIterable {
     
     func numberOfRows() -> Int{
         switch self {
-        case .trending:
+        case .topSection:
             return 2
-        case .thanksgiving, .quickAndEasy:
+        case .suggestedByCreators, .bestUnder15Mins:
             return 1
         }
     }
     
     func getScrollingBehavior() -> UICollectionLayoutSectionOrthogonalScrollingBehavior {
         switch self {
-        case .trending:
+        case .topSection:
             return .groupPaging
         
-        case .thanksgiving, .quickAndEasy:
+        case .suggestedByCreators, .bestUnder15Mins:
             return .paging
         }
     }

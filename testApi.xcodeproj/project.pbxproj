@@ -19,6 +19,8 @@
 		AA9F81232757489C00768DD9 /* TitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F81152757489C00768DD9 /* TitleSupplementaryView.swift */; };
 		AA9F81252757489C00768DD9 /* LoginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F81182757489C00768DD9 /* LoginState.swift */; };
 		AA9F812727576AA900768DD9 /* BrowseSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F812627576AA900768DD9 /* BrowseSwiftUI.swift */; };
+		D64EFF892758479F00AEDA96 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64EFF882758479F00AEDA96 /* SearchView.swift */; };
+		D64EFF8B27585D4100AEDA96 /* SearchSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64EFF8A27585D4100AEDA96 /* SearchSwiftUI.swift */; };
 		D6C26D2E2741C7D900406DB3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C26D2D2741C7D900406DB3 /* AppDelegate.swift */; };
 		D6C26D302741C7D900406DB3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C26D2F2741C7D900406DB3 /* SceneDelegate.swift */; };
 		D6C26D322741C7D900406DB3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C26D312741C7D900406DB3 /* ViewController.swift */; };
@@ -35,7 +37,6 @@
 		D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */; };
 		D6CD44252753F78E00ACA18F /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441E2753F78E00ACA18F /* AuthTextField.swift */; };
 		E365AB9C2757630200187B8A /* RecipeCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = E365AB9B2757630200187B8A /* RecipeCategories.swift */; };
-		E365ABA027583F8200187B8A /* IndividualRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E365AB9F27583F8200187B8A /* IndividualRecipe.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		AA9F81152757489C00768DD9 /* TitleSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleSupplementaryView.swift; sourceTree = "<group>"; };
 		AA9F81182757489C00768DD9 /* LoginState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
 		AA9F812627576AA900768DD9 /* BrowseSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseSwiftUI.swift; sourceTree = "<group>"; };
+		D64EFF882758479F00AEDA96 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		D64EFF8A27585D4100AEDA96 /* SearchSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSwiftUI.swift; sourceTree = "<group>"; };
 		D6C26D2A2741C7D900406DB3 /* testApi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testApi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6C26D2D2741C7D900406DB3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6C26D2F2741C7D900406DB3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,7 +91,6 @@
 		D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		D6CD441E2753F78E00ACA18F /* AuthTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
 		E365AB9B2757630200187B8A /* RecipeCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategories.swift; sourceTree = "<group>"; };
-		E365AB9F27583F8200187B8A /* IndividualRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualRecipe.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				AA9F810C2757489C00768DD9 /* AuthUI */,
 				AA9F81102757489C00768DD9 /* AppNavigationView.swift */,
 				AA9F81112757489C00768DD9 /* ContentView.swift */,
+				D64EFF882758479F00AEDA96 /* SearchView.swift */,
 				AA9F81122757489C00768DD9 /* BrowseUI */,
 			);
 			path = Views;
@@ -160,10 +163,10 @@
 			children = (
 				AA9F81132757489C00768DD9 /* BrowseCollectionCell.swift */,
 				AA9F81142757489C00768DD9 /* BrowseVC.swift */,
-				E365AB9F27583F8200187B8A /* IndividualRecipe.swift */,
 				AA9F81152757489C00768DD9 /* TitleSupplementaryView.swift */,
 				E365AB9B2757630200187B8A /* RecipeCategories.swift */,
 				AA9F812627576AA900768DD9 /* BrowseSwiftUI.swift */,
+				D64EFF8A27585D4100AEDA96 /* SearchSwiftUI.swift */,
 			);
 			path = BrowseUI;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				D6CD44252753F78E00ACA18F /* AuthTextField.swift in Sources */,
 				AA9F81232757489C00768DD9 /* TitleSupplementaryView.swift in Sources */,
 				AA9F811F2757489C00768DD9 /* AppNavigationView.swift in Sources */,
+				D64EFF892758479F00AEDA96 /* SearchView.swift in Sources */,
 				AA9F811A2757489C00768DD9 /* AddRecipe.swift in Sources */,
 				AA9F812727576AA900768DD9 /* BrowseSwiftUI.swift in Sources */,
 				D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */,
@@ -383,8 +387,8 @@
 				E365AB9C2757630200187B8A /* RecipeCategories.swift in Sources */,
 				D6C26D302741C7D900406DB3 /* SceneDelegate.swift in Sources */,
 				AA9F811D2757489C00768DD9 /* ResetPasswordView.swift in Sources */,
+				D64EFF8B27585D4100AEDA96 /* SearchSwiftUI.swift in Sources */,
 				AA9F81202757489C00768DD9 /* ContentView.swift in Sources */,
-				E365ABA027583F8200187B8A /* IndividualRecipe.swift in Sources */,
 				AA9F811E2757489C00768DD9 /* RegisterView.swift in Sources */,
 				AA9F81192757489C00768DD9 /* ProfileView.swift in Sources */,
 				D6CD44222753F78E00ACA18F /* LabelledTextView.swift in Sources */,

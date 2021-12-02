@@ -41,7 +41,7 @@ class BrowseCollectionCell: UICollectionViewCell {
         }
     }
     
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
