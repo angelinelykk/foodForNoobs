@@ -54,7 +54,7 @@ class BrowseVC: UIViewController {
                     case .failure(let error):
                         print(error)
                     case .success(let r):
-                        self.recipes[RecipeCategories.bestUnder15Mins] = r as! [RecipeNoNutrition]
+                        self.recipes[RecipeCategories.thanksgiving] = r as! [RecipeNoNutrition]
                         // fill recommended
                         let quickAndEasy: [String] = ["Quick"]
                         let title: [String] = ["title"]
@@ -64,7 +64,7 @@ class BrowseVC: UIViewController {
                             case .failure(let error):
                                 print(error)
                             case .success(let r):
-                                self.recipes[RecipeCategories.suggestedByCreators] = r as! [RecipeNoNutrition]
+                                self.recipes[RecipeCategories.quickAndEasy] = r as! [RecipeNoNutrition]
                                 DispatchQueue.main.sync {
                                     self.configureViews()
                                     self.configureDataSource()

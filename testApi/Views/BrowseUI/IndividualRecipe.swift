@@ -53,7 +53,7 @@ class IndividualRecipe: UIViewController {
         label.numberOfLines = 0
         label.text = ""
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 20, weight: UIFont.Weight.bold)
+        label.font = .systemFont(ofSize: 15, weight: UIFont.Weight.bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -82,7 +82,7 @@ class IndividualRecipe: UIViewController {
         label.numberOfLines = 0
         label.text = ""
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 20, weight: UIFont.Weight.bold)
+        label.font = .systemFont(ofSize: 15, weight: UIFont.Weight.bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -122,29 +122,38 @@ class IndividualRecipe: UIViewController {
         view.backgroundColor = .systemMint
         imageView.image = image
         
+        view.addSubview(titleLabel)
+        imageView.image = image
+                self.imageView.frame = CGRect(x: view.center.x - view.bounds.height/10, y:view.center.y - view.bounds.height/4 - 10, width: view.bounds.height/5, height: view.bounds.height/5)
+        view.addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            
+            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor)
+
+        ])
         
         view.addSubview(scrollView)
         scrollView.addSubview(scrollViewContainer)
-        scrollViewContainer.addArrangedSubview(titleLabel)
         
-        scrollViewContainer.addArrangedSubview(imageView)
-        imageView.contentMode = .scaleAspectFill
         scrollViewContainer.addArrangedSubview(ingredientsLabel)
         scrollViewContainer.addArrangedSubview(ingredientsList)
         scrollViewContainer.addArrangedSubview(instructionsLabel)
         scrollViewContainer.addArrangedSubview(instructionsList)
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-                scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-                scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-                scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height/2).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-                scrollViewContainer.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-                scrollViewContainer.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-                scrollViewContainer.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-                scrollViewContainer.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-                // this is important for scrolling
-                scrollViewContainer.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        scrollViewContainer.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        scrollViewContainer.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        scrollViewContainer.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        scrollViewContainer.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        // this is important for scrolling
+        scrollViewContainer.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
 //        scrollView = UIScrollView(frame: view.bounds)
 //
 //        view.addSubview(scrollView)
@@ -164,7 +173,7 @@ class IndividualRecipe: UIViewController {
 //        view.addSubview(scrollView)
 //
 //
-//        NSLayoutConstraint.activate([
+        NSLayoutConstraint.activate([
 //            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 //            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height/8),
 //
@@ -172,7 +181,7 @@ class IndividualRecipe: UIViewController {
 //
 //            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor)
 //
-//        ])
+        ])
 //
 //        view.addSubview(stack)
 //        stack.addArrangedSubview(ingredientsLabel)
@@ -200,12 +209,12 @@ class IndividualRecipe: UIViewController {
         self.titleLabel.text = givenRecipe.title
         for dict in givenRecipe.ingredients {
             for value in dict.values {
-                self.ingredientsList.text! += (value + "\n")
+                self.ingredientsList.text! += (value + "\n" + "\n")
             }
         }
         for dict in givenRecipe.instructions {
             for value in dict.values {
-                self.instructionsList.text! += (value + "\n")
+                self.instructionsList.text! += (value + "\n" + "\n")
             }
         }
     }
