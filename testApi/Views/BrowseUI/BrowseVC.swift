@@ -24,71 +24,16 @@ class BrowseVC: UIViewController {
     
     var navigationBar: UINavigationBar?
     
-    override func viewWillAppear(_ animated: Bool) {
+    func updateData() {
         for v in view.subviews{
             v.removeFromSuperview()
         }
-        view.backgroundColor = .white
-        navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-        
-        navigationBar!.tintColor = .systemMint
-        view.addSubview(navigationBar!)
-        
-        
-        let navItem = UINavigationItem(title: "Try Something New")
-
-        navigationBar!.setItems([navItem], animated: false)
-        
-        NSLayoutConstraint.activate([
-            navigationBar!.topAnchor.constraint(equalTo: view.topAnchor)
-        ])
-        
-        RecipeAPI.shared.getMostLikedRecipes(number: 20, completion: { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let r):
-                self.recipes[RecipeCategories.trending] = r
-                //fill thanksgiving
-                let thanksgiving: [String] = ["thanksgiving"]
-                let ingredientsAndTitle: [String] = ["title"]
-                RecipeAPI.shared.search(searchTerms: thanksgiving, criteria: ingredientsAndTitle, has_nutrition: false, completion: {
-                    result in
-                    switch result {
-                    case .failure(let error):
-                        print(error)
-                    case .success(let r):
-                        self.recipes[RecipeCategories.thanksgiving] = r as! [RecipeNoNutrition]
-                        // fill recommended
-                        let quickAndEasy: [String] = ["Quick"]
-                        let title: [String] = ["title"]
-                        RecipeAPI.shared.search(searchTerms: quickAndEasy, criteria: title, has_nutrition: false, completion: {
-                            result in
-                            switch result {
-                            case .failure(let error):
-                                print(error)
-                            case .success(let r):
-                                self.recipes[RecipeCategories.quickAndEasy] = r as! [RecipeNoNutrition]
-                                DispatchQueue.main.sync {
-                                    self.configureViews()
-                                    self.configureDataSource()
-                                }
-                            }
-                        })
-                    }
-                })
-            }
-        })
-        
-        //self.configureViews()
-        //self.configureDataSource()
-        
+        viewDidLoad()
     }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
         
         navigationBar!.tintColor = .systemMint
@@ -260,4 +205,5 @@ extension BrowseVC: UICollectionViewDelegate {
         present(vc, animated: false, completion: nil)
     }
 }
+
 

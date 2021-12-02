@@ -242,7 +242,10 @@ class IndividualRecipe: UIViewController {
     }
     
     @objc func didTapReturn(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
+        
+        dismiss(animated: true, completion: {
+            BrowseVC.shared.updateData()
+        })
     }
     
     @objc func didTapLike(_ sender: UIButton) {
@@ -262,3 +265,4 @@ class IndividualRecipe: UIViewController {
         
     }
 }
+
