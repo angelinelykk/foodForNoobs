@@ -51,6 +51,16 @@ class IndividualRecipe: UIViewController {
         return btn
     }()
     
+    private let completeButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .systemMint
+        btn.setTitle("Complete", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .systemMint
+        btn.setTitleColor(UIColor.white, for: .normal)
+        return btn
+    }()
+    
     var recipe: RecipeNoNutrition? {
         didSet {
             RecipeAPI.shared.getImage(id: recipe!.image_ids[0], completion: { result in
@@ -256,13 +266,48 @@ class IndividualRecipe: UIViewController {
     @objc func didTapReview(_ sender: UIButton) {
         scrollView.removeFromSuperview()
         view.addSubview(reviewTextField)
+        view.addSubview(completeButton)
         NSLayoutConstraint.activate([
             reviewTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            reviewTextField.topAnchor.constraint(equalTo: reviewButton.bottomAnchor, constant: 5)
+            reviewTextField.topAnchor.constraint(equalTo: reviewButton.bottomAnchor, constant: 5),
+            
+            completeButton.topAnchor.constraint(equalTo: reviewTextField.bottomAnchor, constant:5),
+            completeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+        completeButton.addTarget(self, action: #selector(didTapComplete(_:)), for: .touchUpInside)
+    }
+    
+    @objc func didTapComplete(_ sender: UIButton) {
+        reviewTextField.removeFromSuperview()
+        completeButton.removeFromSuperview()
+        RecipeAPI.shared.toggleRecipeLike(recipe_id: recipe!.id, completion: nil)
+        print("pressed like")
         
+        view.addSubview(scrollView)
+        scrollView.addSubview(scrollViewContainer)
         
+        scrollViewContainer.addArrangedSubview(ingredientsLabel)
+        scrollViewContainer.addArrangedSubview(ingredientsList)
+        scrollViewContainer.addArrangedSubview(instructionsLabel)
+        scrollViewContainer.addArrangedSubview(instructionsList)
         
+        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.bounds.height/2).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+
+        scrollViewContainer.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        scrollViewContainer.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        scrollViewContainer.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        scrollViewContainer.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        // this is important for scrolling
+        scrollViewContainer.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        
+        returnButton.addTarget(self, action: #selector(didTapReturn(_:)), for: .touchUpInside)
+        
+        likeButton.addTarget(self, action: #selector(didTapLike(_:)), for: .touchUpInside)
+        
+        reviewButton.addTarget(self, action: #selector(didTapReview(_:)), for: .touchUpInside)
     }
 }
 
