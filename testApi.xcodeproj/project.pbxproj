@@ -35,7 +35,7 @@
 		D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */; };
 		D6CD44252753F78E00ACA18F /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD441E2753F78E00ACA18F /* AuthTextField.swift */; };
 		E365AB9C2757630200187B8A /* RecipeCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = E365AB9B2757630200187B8A /* RecipeCategories.swift */; };
-		E365AB9E2757634F00187B8A /* RecipeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E365AB9D2757634F00187B8A /* RecipeProvider.swift */; };
+		E365ABA027583F8200187B8A /* IndividualRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E365AB9F27583F8200187B8A /* IndividualRecipe.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,7 +88,7 @@
 		D6CD441C2753F78E00ACA18F /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		D6CD441E2753F78E00ACA18F /* AuthTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
 		E365AB9B2757630200187B8A /* RecipeCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategories.swift; sourceTree = "<group>"; };
-		E365AB9D2757634F00187B8A /* RecipeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeProvider.swift; sourceTree = "<group>"; };
+		E365AB9F27583F8200187B8A /* IndividualRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualRecipe.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +160,7 @@
 			children = (
 				AA9F81132757489C00768DD9 /* BrowseCollectionCell.swift */,
 				AA9F81142757489C00768DD9 /* BrowseVC.swift */,
-				E365AB9D2757634F00187B8A /* RecipeProvider.swift */,
+				E365AB9F27583F8200187B8A /* IndividualRecipe.swift */,
 				AA9F81152757489C00768DD9 /* TitleSupplementaryView.swift */,
 				E365AB9B2757630200187B8A /* RecipeCategories.swift */,
 				AA9F812627576AA900768DD9 /* BrowseSwiftUI.swift */,
@@ -383,8 +383,8 @@
 				E365AB9C2757630200187B8A /* RecipeCategories.swift in Sources */,
 				D6C26D302741C7D900406DB3 /* SceneDelegate.swift in Sources */,
 				AA9F811D2757489C00768DD9 /* ResetPasswordView.swift in Sources */,
-				E365AB9E2757634F00187B8A /* RecipeProvider.swift in Sources */,
 				AA9F81202757489C00768DD9 /* ContentView.swift in Sources */,
+				E365ABA027583F8200187B8A /* IndividualRecipe.swift in Sources */,
 				AA9F811E2757489C00768DD9 /* RegisterView.swift in Sources */,
 				AA9F81192757489C00768DD9 /* ProfileView.swift in Sources */,
 				D6CD44222753F78E00ACA18F /* LabelledTextView.swift in Sources */,
