@@ -27,7 +27,10 @@ struct Review: Codable {
     var text : String
 }
 
-public struct Recipe: Codable, Hashable {
+protocol RecipeType {
+    var id : String { get set}
+}
+public struct Recipe: Codable, Hashable,RecipeType {
     //Equatable conformance
     public static func == (lhs: Recipe, rhs: Recipe) -> Bool {
         return lhs.id == rhs.id
@@ -100,7 +103,7 @@ public struct Recipe: Codable, Hashable {
     //    hasher.combine(hashID)
     //}
 }
-public struct RecipeNoNutrition : Codable, Hashable {
+public struct RecipeNoNutrition : Codable, Hashable,RecipeType {
     var id : String
     //A list of ingredients, each item is an ingredient
     var ingredients : [Dictionary<String, String>]
@@ -165,20 +168,20 @@ struct Nutrition: Codable, Hashable {
     var sat : Double
     var sod : Double
     var sug : Double
+    init(dict: [String: Double]) {
+        self.fat = dict["fat"] ?? -1
+        self.nrg = dict["nrg"] ?? -1
+        self.pro = dict["pro"] ?? -1
+        self.sat = dict["sat"] ?? -1
+        self.sod = dict["sod"] ?? -1
+        self.sug = dict["sug"] ?? -1
+    }
 }
 
-struct OptionalNutrition: Codable {
-    var fat : Double = -1
-    var nrg : Double = -1
-    var pro : Double = -1
-    var sat : Double = -1
-    var sod : Double = -1
-    var sug : Double = -1
-}
 struct NutritionRange: Codable {
-    var minimum : OptionalNutrition
-    var maximum : OptionalNutrition
-    init(minimum: OptionalNutrition, maximum: OptionalNutrition) {
+    var minimum : Nutrition
+    var maximum : Nutrition
+    init(minimum: Nutrition, maximum: Nutrition) {
         self.minimum = minimum
         self.maximum = maximum
     }
@@ -199,7 +202,7 @@ class RecipeAPI {
     private var token: String!
     private var loginTime : Date!
     //Stores username and password for authentication. Refresh tokens --> user signs in two tokens. One is regular session token one is a refresh token. Session token expires in a week. Refresh in a month. Refresh can be used to create a new token... etc.
-    private var username : String!
+    var username : String!
     private var password : String!
     //Shared instance. This is how the API should be accessed
     static let shared = RecipeAPI()
@@ -227,6 +230,7 @@ class RecipeAPI {
     //Call login on the shared object to login a user and save a new token for authentication. Returns completion with string "success" if sucessful, invalid password if not sucessful.
     func login(username: String, password: String, completion: ((Result<String,SignUpError>)->Void)?) {
         let user_data_string = username + ":" + password
+        self.username = username
         let data = user_data_string.data(using: String.Encoding.utf8)
         let loginData = data?.base64EncodedString()
         var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/login")!)
@@ -265,42 +269,13 @@ class RecipeAPI {
             })
         }
     }
-    //API to search for recipes. takes an array of criteria (Strings) to find in an array of possible fields in the recipe. Allowed are title, ingredients, instructions.
-    func search(searchTerms: [String], criteria: [String], completion: ((Result<[Recipe],SignUpError>)->Void)?) {
-        validate_token()
-        let dish_name = searchTerms.joined(separator: "-")
-        let criteria_names = criteria.joined(separator: "-")
-        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/dish_keywords=" + dish_name + "&criteria=" + criteria_names + "&has_nutrition=true")!)
-        request.httpMethod = "GET"
-        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
-            if let error = error {
-                print(error)
-                completion?(.failure(.unspecified))
-            }
-            let decoder = JSONDecoder()
-            do {
-                let http = urlresponse as! HTTPURLResponse
-                if http.statusCode == 403 {
-                    completion?(.failure(.usageLimitExceeded))
-                    print("Usage Limit Exceeded")
-                }
-                let recipes = try decoder.decode([Recipe].self, from: data!)
-                completion?(.success(recipes))
-            } catch {
-                print(error)
-            }
-            
-        })
-        task.resume()
-    }
+
     //API to search for recipes with no nutritional info. takes an array of criteria (Strings) to find in an array of possible fields in the recipe. Allowed are title, ingredients, instructions.
-    func search(searchTerms: [String], criteria: [String], has_nutrition: Bool, completion: ((Result<[RecipeNoNutrition],SignUpError>)->Void)?) {
+    func search(searchTerms: [String], criteria: [String], has_nutrition: Bool, completion: ((Result<[RecipeType],SignUpError>)->Void)?) {
         validate_token()
         let dish_name = searchTerms.joined(separator: "-")
         let criteria_names = criteria.joined(separator: "-")
-        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/dish_keywords=" + dish_name + "&criteria=" + criteria_names + "&has_nutrition=" + String(has_nutrition))!)
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/dish_keywords=" + dish_name + "&criteria=" + criteria_names + "&has_nutrition=\(has_nutrition)")!)
         request.httpMethod = "GET"
         request.addValue(token, forHTTPHeaderField: "x-access-tokens")
         let session = URLSession.shared
@@ -316,7 +291,12 @@ class RecipeAPI {
                     completion?(.failure(.usageLimitExceeded))
                     print("Usage Limit Exceeded")
                 }
-                let recipes = try decoder.decode([RecipeNoNutrition].self, from: data!)
+                let recipes : [RecipeType]!
+                if has_nutrition {
+                    recipes = try decoder.decode([Recipe].self, from: data!)
+                } else {
+                    recipes = try decoder.decode([RecipeNoNutrition].self, from: data!)
+                }
                 completion?(.success(recipes))
             } catch {
                 print(error)

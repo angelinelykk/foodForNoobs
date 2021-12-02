@@ -20,24 +20,35 @@ struct AddRecipe: View {
     @State private var showPhotoLibrary = false
     @State private var takePhoto = false
     @State var hasImage = false
+    
+    func resetValues() {
+        self.title = ""
+        self.amounts = [String](repeating: "", count: 1)
+        self.ingredients = [String](repeating: "", count: 1)
+        self.instructions = [String](repeating: "", count: 1)
+        self.image = {
+            let config = UIImage.SymbolConfiguration(pointSize: 250)
+            return UIImage(systemName: "photo",withConfiguration: config)!
+        }()
+        self.showPhotoLibrary = false
+        self.takePhoto = false
+        self.hasImage = false
+    }
+    
     var body: some View {
         GeometryReader { geometry in
-            VStack {
-                Spacer()
-                AppTitleText()
-                Spacer()
+            VStack(alignment: .center) {
                 Form {
                     TextField("Title", text: self.$title)
-                    HStack {
-                        Image(uiImage: self.image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: geometry.size.width - 32)
-                    }
+                    Image(uiImage: self.image)
+                        .resizable()
+                        .scaledToFit()
                     CameraButtonsView(showPhotoLibrary: self.$showPhotoLibrary, takePhoto: self.$takePhoto)
                     IngredientsView(ingredients: self.$ingredients, amounts: self.$amounts, width: geometry.size.width)
                     InstructionsView(instructions: self.$instructions)
-                    SubmitButtonView(title: self.title, image: self.image, ingredients: self.ingredients, amounts: self.amounts, instructions: self.instructions, hasImage: self.hasImage)
+                    SubmitButtonView(title: self.title, image: self.image, ingredients: self.ingredients, amounts: self.amounts, instructions: self.instructions, hasImage: self.hasImage, completion: {
+                        resetValues()
+                    })
                 }
             }.sheet(isPresented: self.$showPhotoLibrary) {
                 ImagePicker(sourceType: .photoLibrary, selectedImage: self.$image, hasImage: self.$hasImage)
@@ -45,7 +56,7 @@ struct AddRecipe: View {
             .sheet(isPresented: self.$takePhoto) {
                 ImagePicker(sourceType: .photoLibrary, selectedImage: self.$image, hasImage: self.$hasImage)
             }
-        }
+        }.padding(.top)
     }
     struct CameraButtonsView : View {
         @Binding var showPhotoLibrary : Bool
@@ -61,6 +72,7 @@ struct AddRecipe: View {
                 }) {
                     TakePhoto()
                 }
+                Spacer()
                 Button(action: {
                     self.showPhotoLibrary = true
                 }) {
@@ -143,6 +155,7 @@ struct AddRecipe: View {
         var amounts : [String]
         var instructions : [String]
         var hasImage : Bool
+        var completion: ()->Void
         @State var alert : Alert!
         @State var isPresented : Bool = false
         var body : some View {
@@ -178,6 +191,7 @@ struct AddRecipe: View {
                     return
                 }
                 RecipeAPI.shared.uploadRecipe(title: self.title, amounts: self.amounts, ingredients: self.ingredients, instructions: self.instructions, image: self.image)
+                completion()
             }) {
                 UploadRecipe()
             }
@@ -187,33 +201,24 @@ struct AddRecipe: View {
             }
         }
     }
-    struct AppTitleText : View {
-        var body: some View {
-            return Text("Food For Noobs")
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 20)
-        }
-    }
     struct TakePhoto : View {
         var body: some View {
             return Text("Take Photo")
                 .font(.system(size: 15, weight: .bold))
                 .foregroundColor(.white)
                 .padding()
-                .frame(width: UIScreen.main.bounds.size.width / 2 - 18, height: 50)
+                .frame(width: UIScreen.main.bounds.size.width / 3, height: 50)
                 .background(Color.green)
                 .cornerRadius(15.0)
         }
     }
     struct ChoosePhoto : View {
         var body: some View {
-            return Text("Choose Photo")
+            return Text("Gallery")
                 .font(.system(size: 15, weight: .bold))
                 .foregroundColor(.white)
                 .padding()
-                .frame(width: UIScreen.main.bounds.size.width / 2 - 18, height: 50)
+                .frame(width: UIScreen.main.bounds.size.width / 3, height: 50)
                 .background(Color.green)
                 .cornerRadius(15.0)
         }

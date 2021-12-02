@@ -12,13 +12,17 @@ struct ProfileView : View {
     var body: some View {
         NavigationView() {
             VStack(alignment: .center) {
+                Text(RecipeAPI.shared.username)
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 20)
                 Spacer()
                 Button(action: {
                     LoginState.shared.loggedIn = false
                 }) {
                     LogoutButtonContent()
                 }
-                Spacer()
             }
             .padding(.all, 30)
         }.navigationBarTitle("Profile", displayMode: .inline)
