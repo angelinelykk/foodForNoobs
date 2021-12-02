@@ -165,20 +165,20 @@ struct Nutrition: Codable, Hashable {
     var sat : Double
     var sod : Double
     var sug : Double
+    init(dict: [String: Double]) {
+        self.fat = dict["fat"] ?? -1
+        self.nrg = dict["nrg"] ?? -1
+        self.pro = dict["pro"] ?? -1
+        self.sat = dict["sat"] ?? -1
+        self.sod = dict["sod"] ?? -1
+        self.sug = dict["sug"] ?? -1
+    }
 }
 
-struct OptionalNutrition: Codable {
-    var fat : Double = -1
-    var nrg : Double = -1
-    var pro : Double = -1
-    var sat : Double = -1
-    var sod : Double = -1
-    var sug : Double = -1
-}
 struct NutritionRange: Codable {
-    var minimum : OptionalNutrition
-    var maximum : OptionalNutrition
-    init(minimum: OptionalNutrition, maximum: OptionalNutrition) {
+    var minimum : Nutrition
+    var maximum : Nutrition
+    init(minimum: Nutrition, maximum: Nutrition) {
         self.minimum = minimum
         self.maximum = maximum
     }
