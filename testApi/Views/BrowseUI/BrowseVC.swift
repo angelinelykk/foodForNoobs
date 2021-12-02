@@ -25,41 +25,10 @@ class BrowseVC: UIViewController {
     var navigationBar: UINavigationBar?
     
     func updateData() {
-        RecipeAPI.shared.getMostLikedRecipes(number: 20, completion: { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let r):
-                self.recipes[RecipeCategories.trending] = r
-                //fill thanksgiving
-                let thanksgiving: [String] = ["thanksgiving"]
-                let ingredientsAndTitle: [String] = ["title"]
-                RecipeAPI.shared.search(searchTerms: thanksgiving, criteria: ingredientsAndTitle, has_nutrition: false, completion: {
-                    result in
-                    switch result {
-                    case .failure(let error):
-                        print(error)
-                    case .success(let r):
-                        self.recipes[RecipeCategories.thanksgiving] = r as! [RecipeNoNutrition]
-                        // fill recommended
-                        let quickAndEasy: [String] = ["Quick"]
-                        let title: [String] = ["title"]
-                        RecipeAPI.shared.search(searchTerms: quickAndEasy, criteria: title, has_nutrition: false, completion: {
-                            result in
-                            switch result {
-                            case .failure(let error):
-                                print(error)
-                            case .success(let r):
-                                self.recipes[RecipeCategories.quickAndEasy] = r as! [RecipeNoNutrition]
-                                DispatchQueue.main.sync {
-                                    self.collectionView.reloadData()
-                                }
-                            }
-                        })
-                    }
-                })
-            }
-        })
+        for v in view.subviews{
+            v.removeFromSuperview()
+        }
+        viewDidLoad()
     }
 
     override func viewDidLoad() {
@@ -236,4 +205,5 @@ extension BrowseVC: UICollectionViewDelegate {
         present(vc, animated: false, completion: nil)
     }
 }
+
 
