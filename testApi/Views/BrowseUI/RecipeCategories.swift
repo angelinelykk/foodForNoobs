@@ -1,3 +1,10 @@
+//
+//  RecipeCategories.swift
+//  testApi
+//
+//  Created by Angeline Lee on 1/12/21.
+//
+
 import Foundation
 import UIKit
 
@@ -30,3 +37,4 @@ enum RecipeCategories: String, CaseIterable {
         }
     }
 }
+

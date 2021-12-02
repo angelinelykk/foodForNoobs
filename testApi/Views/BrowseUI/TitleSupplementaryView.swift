@@ -28,3 +28,4 @@ extension TitleSupplementaryView {
         label.font = .preferredFont(forTextStyle: .title2)
     }
 }
+
