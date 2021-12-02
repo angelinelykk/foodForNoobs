@@ -48,7 +48,7 @@ struct addMealPlan: View {
                 Button(action: {
                     self.ingredients.append("")
                 }) {
-                    addIngredient()
+                    //addIngredient()
                 }
                 Spacer()
             }
@@ -67,7 +67,7 @@ struct addMealPlan: View {
         var ingredients : [String]
         var cuisines : [String]
         
-        @State var recipes: [RecipeCategories: [RecipeNoNutrition]] = [:]
+        @State var recipes = [RecipeNoNutrition]()
 
         
         @State var alert : Alert!
@@ -110,7 +110,7 @@ struct addMealPlan: View {
                                     case .failure(let error):
                                         print(error)
                                     case .success(let r):
-                                        self.recipes[RecipeCategories.bestUnder15Mins] = r as! [RecipeNoNutrition]
+                                        self.recipes = r as! [RecipeNoNutrition]
                                     }
                                         
                                 })

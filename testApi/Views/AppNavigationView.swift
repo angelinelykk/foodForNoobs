@@ -18,7 +18,12 @@ struct AppNavigationView: View {
                 }
             SearchSwiftUI()
                 .tabItem {
-                    Image(systemName: "search")
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
+            addMealPlan()
+                .tabItem {
+                    Image(systemName: "plus.circle.fill")
                     Text("Search")
                 }
             AddRecipe()
