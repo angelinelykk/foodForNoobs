@@ -47,7 +47,7 @@ class SearchView : UIViewController {
          view.addSubview(textField)
         //self.navigationItem.titleView = searchController.searchBar
         view.addSubview(collectionView)
-        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 88, left: 16, bottom: 50, right: 16))
+        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 88, left: 16, bottom: 65, right: 16))
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -77,8 +77,9 @@ extension SearchView : UICollectionViewDelegateFlowLayout {
         return CGSize(width: view.frame.width-32, height: 0.75*view.frame.width)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let recipe = self.recipes[indexPath.item]
+        let cell = self.collectionView.cellForItem(at: indexPath)  as! BrowseCollectionCell
         print("tapped!")
+        self.present(IndividualRecipe(givenRecipe: cell.recipe!, givenImage: cell.imageView.image!), animated: true)
     }
 }
 /*
@@ -107,8 +108,10 @@ extension SearchView : UISearchResultsUpdating {
 */
 
 extension SearchView : UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
+        print("running")
         if textView.text != "" {
+            print("running")
         RecipeAPI.shared.search(searchTerms: textView.text.components(separatedBy: " "), criteria: ["title","ingredients","instructions"], has_nutrition: false, completion: { result in
             switch result {
             case .failure(let error):
