@@ -19,36 +19,20 @@ class BrowseVC: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<Section, RecipeNoNutrition>!
     
     var recipes: [RecipeCategories: [RecipeNoNutrition]] = [:]
-    
-    var navigationBar: UINavigationBar?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-        
-        navigationBar!.tintColor = .systemMint
-        view.addSubview(navigationBar!)
-        
-        
-        let navItem = UINavigationItem(title: "Try Something New")
-
-        navigationBar!.setItems([navItem], animated: false)
-        
-        NSLayoutConstraint.activate([
-            navigationBar!.topAnchor.constraint(equalTo: view.topAnchor)
-        ])
-        
         RecipeAPI.shared.getMostLikedRecipes(number: 20, completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success(let r):
-                self.recipes[RecipeCategories.trending] = r
-                //fill thanksgiving
-                let thanksgiving: [String] = ["thanksgiving"]
-                let ingredientsAndTitle: [String] = ["title"]
-                RecipeAPI.shared.search(searchTerms: thanksgiving, criteria: ingredientsAndTitle, has_nutrition: false, completion: {
+                self.recipes[RecipeCategories.topSection] = r
+                //fill best under 15
+                let beef: [String] = ["beef"]
+                let ingredients: [String] = ["ingredients"]
+                RecipeAPI.shared.search(searchTerms: beef, criteria: ingredients, has_nutrition: false, completion: {
                     result in
                     switch result {
                     case .failure(let error):
@@ -56,9 +40,8 @@ class BrowseVC: UIViewController {
                     case .success(let r):
                         self.recipes[RecipeCategories.bestUnder15Mins] = r as! [RecipeNoNutrition]
                         // fill recommended
-                        let quickAndEasy: [String] = ["Quick"]
-                        let title: [String] = ["title"]
-                        RecipeAPI.shared.search(searchTerms: quickAndEasy, criteria: title, has_nutrition: false, completion: {
+                        let recommended: [String] = ["chicken"]
+                        RecipeAPI.shared.search(searchTerms: recommended, criteria: ingredients, has_nutrition: false, completion: {
                             result in
                             switch result {
                             case .failure(let error):
@@ -136,7 +119,7 @@ extension BrowseVC {
     func configureViews() {
         let layout = createLayout()
         collectionView = UICollectionView(
-            frame: view.bounds.inset(by: UIEdgeInsets(top: 40, left: 0, bottom: 100, right: 0)),
+            frame: view.bounds.inset(by: UIEdgeInsets(top: 88, left: 0, bottom: 0, right: 0)),
             collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         
@@ -144,7 +127,6 @@ extension BrowseVC {
         collectionView.allowsMultipleSelection = false
         
         view.addSubview(collectionView)
-        collectionView.delegate = self
     }
     
     func configureDataSource() {
@@ -188,12 +170,4 @@ extension BrowseVC {
     }
 }
 
-extension BrowseVC: UICollectionViewDelegate {
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let tappedCell = collectionView.cellForItem(at:indexPath) as! BrowseCollectionCell
-        let vc = IndividualRecipe(givenRecipe: tappedCell.recipe!, givenImage: tappedCell.imageView.image!)
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: false, completion: nil)
-    }
-}
 

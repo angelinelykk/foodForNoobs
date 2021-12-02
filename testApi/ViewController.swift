@@ -84,8 +84,8 @@ class ViewController: UIViewController {
     
     func finishLoading() {
         //Perform a search for recipes with the word thai in either title or ingredients
-        //RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["italian"], nutritionRanges: NutritionRange(minimum: OptionalNutrition(fat: -1, nrg: -1, pro: 17, sat: -1, sod: 0.15, sug: -1), maximum: OptionalNutrition(fat: -1, nrg: -1, pro: -1, sat: -1, sod: 0.3, sug: 15)), ingredients: ["pasta","basil"], completion: { result in
-        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["Recipe"], ingredients: ["Alexander Hamilton"], completion: { result in
+        RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["italian"], nutritionRanges: NutritionRange(minimum: Nutrition(dict: ["pro": 17, "sod": 0.15]), maximum: Nutrition(dict: ["sug": 15, "sod": 0.3])), ingredients: ["pasta","basil"], completion: { result in
+        //RecipeAPI.shared.makeMealPlan(numMeals: 5, cuisines: ["Recipe"], ingredients: ["Alexander Hamilton"], completion: { result in
             switch result {
             case .failure(let error):
                 print(error)
