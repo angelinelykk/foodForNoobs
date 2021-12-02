@@ -199,7 +199,7 @@ class RecipeAPI {
     private var token: String!
     private var loginTime : Date!
     //Stores username and password for authentication. Refresh tokens --> user signs in two tokens. One is regular session token one is a refresh token. Session token expires in a week. Refresh in a month. Refresh can be used to create a new token... etc.
-    private var username : String!
+    var username : String!
     private var password : String!
     //Shared instance. This is how the API should be accessed
     static let shared = RecipeAPI()
@@ -227,6 +227,7 @@ class RecipeAPI {
     //Call login on the shared object to login a user and save a new token for authentication. Returns completion with string "success" if sucessful, invalid password if not sucessful.
     func login(username: String, password: String, completion: ((Result<String,SignUpError>)->Void)?) {
         let user_data_string = username + ":" + password
+        self.username = username
         let data = user_data_string.data(using: String.Encoding.utf8)
         let loginData = data?.base64EncodedString()
         var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/login")!)
