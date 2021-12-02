@@ -25,8 +25,19 @@ class BrowseCollectionCell: UICollectionViewCell {
                 }
             })
             titleView.text = recipe?.title
-            likesView.text = String(recipe?.likes ?? 0)
-            ratingView.text = String(recipe?.rating ?? 0)
+            
+            if let likes = recipe?.likes {
+                likesView.text = String(likes)
+            }
+            if let rating = recipe?.rating {
+                if let votes = recipe?.num_of_reviews {
+                    if rating > 0 {
+                        ratingView.text = String(rating) + " (" + String(votes) + ")"
+                    } else {
+                        ratingView.text = "No reviews"
+                    }
+                }
+            }
         }
     }
     
