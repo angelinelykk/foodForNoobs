@@ -136,7 +136,7 @@ extension BrowseVC {
     func configureViews() {
         let layout = createLayout()
         collectionView = UICollectionView(
-            frame: view.bounds.inset(by: UIEdgeInsets(top: 40, left: 0, bottom: 100, right: 0)),
+            frame: view.bounds.inset(by: UIEdgeInsets(top: 40, left: 0, bottom: 10, right: 0)),
             collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         

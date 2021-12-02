@@ -10,6 +10,47 @@ import UIKit
 
 class IndividualRecipe: UIViewController {
     
+    private let reviewTextField: AuthTextField = {
+        let tf = AuthTextField(title: "Leave a review")
+        
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+
+    private let returnButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .white
+        btn.setTitle("Back", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .systemMint
+        btn.setTitleColor(UIColor.systemMint, for: .normal)
+        
+        return btn
+    }()
+    
+    
+    
+    private let likeButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .white
+        btn.setTitle("Like", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .systemMint
+        btn.setTitleColor(UIColor.darkGray, for: .normal)
+        
+        return btn
+    }()
+    
+    private let reviewButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .white
+        btn.setTitle("Reviews", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .systemMint
+        btn.setTitleColor(UIColor.darkGray, for: .normal)
+        
+        return btn
+    }()
     
     var recipe: RecipeNoNutrition? {
         didSet {
@@ -117,6 +158,8 @@ class IndividualRecipe: UIViewController {
         }()
     
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemMint
@@ -126,13 +169,27 @@ class IndividualRecipe: UIViewController {
         imageView.image = image
                 self.imageView.frame = CGRect(x: view.center.x - view.bounds.height/10, y:view.center.y - view.bounds.height/4 - 10, width: view.bounds.height/5, height: view.bounds.height/5)
         view.addSubview(imageView)
+        view.addSubview(returnButton)
+        view.addSubview(likeButton)
+        view.addSubview(reviewButton)
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
-            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor)
-
+            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            
+            likeButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
+            likeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -40),
+            
+            reviewButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
+            reviewButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 40),
+            
+            
+            returnButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
+            returnButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 5)
+            
+            
         ])
         
         view.addSubview(scrollView)
@@ -145,8 +202,8 @@ class IndividualRecipe: UIViewController {
         
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height/2).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.bounds.height/2).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
 
         scrollViewContainer.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
         scrollViewContainer.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
@@ -154,51 +211,13 @@ class IndividualRecipe: UIViewController {
         scrollViewContainer.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
         // this is important for scrolling
         scrollViewContainer.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-//        scrollView = UIScrollView(frame: view.bounds)
-//
-//        view.addSubview(scrollView)
-//
-        //view.addSubview(titleLabel)
-//        imageView.image = image
-//        self.imageView.frame = CGRect(x: view.center.x - view.bounds.height/10, y:view.center.y - view.bounds.height/4 - 10, width: view.bounds.height/5, height: view.bounds.height/5)
-//
-//        view.addSubview(imageView)
-//
-//        view.addSubview(ingredientsLabel)
-//
-//        //ingredientslist
-//        scrollView = UIScrollView(frame: view.bounds)
-//        scrollView.contentSize = ingredientsList.bounds.size
-//        scrollView.addSubview(ingredientsList)
-//        view.addSubview(scrollView)
-//
-//
-        NSLayoutConstraint.activate([
-//            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height/8),
-//
-//
-//
-//            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor)
-//
-        ])
-//
-//        view.addSubview(stack)
-//        stack.addArrangedSubview(ingredientsLabel)
-//        stack.addArrangedSubview(ingredientsList)
-//        stack.addArrangedSubview(instructionsLabel)
-//        stack.addArrangedSubview(instructionsList)
-//
-//
-//        NSLayoutConstraint.activate([
-//            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-//                                           constant: contentEdgeInset.left),
-//            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-//                                            constant: -contentEdgeInset.right),
-//            stack.topAnchor.constraint(equalTo: imageView.bottomAnchor,
-//                                       constant: 60)
-//        ])
         
+        returnButton.addTarget(self, action: #selector(didTapReturn(_:)), for: .touchUpInside)
+        
+        likeButton.addTarget(self, action: #selector(didTapLike(_:)), for: .touchUpInside)
+        
+        reviewButton.addTarget(self, action: #selector(didTapReview(_:)), for: .touchUpInside)
+     
         
     }
     
@@ -221,5 +240,25 @@ class IndividualRecipe: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func didTapReturn(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func didTapLike(_ sender: UIButton) {
+        RecipeAPI.shared.toggleRecipeLike(recipe_id: recipe!.id, completion: nil)
+    }
+    
+    @objc func didTapReview(_ sender: UIButton) {
+        scrollView.removeFromSuperview()
+        view.addSubview(reviewTextField)
+        NSLayoutConstraint.activate([
+            reviewTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            reviewTextField.topAnchor.constraint(equalTo: reviewButton.bottomAnchor, constant: 5)
+        ])
+        
+        
+        
     }
 }
