@@ -28,11 +28,11 @@ class BrowseVC: UIViewController {
             case .failure(let error):
                 print(error)
             case .success(let r):
-                self.recipes[RecipeCategories.topSection] = r
+                self.recipes[RecipeCategories.trending] = r
                 //fill best under 15
-                let beef: [String] = ["beef"]
-                let ingredients: [String] = ["ingredients"]
-                RecipeAPI.shared.search(searchTerms: beef, criteria: ingredients, has_nutrition: false, completion: {
+                let thanksgiving: [String] = ["thanksgiving"]
+                let ingredientsAndTitle: [String] = ["title"]
+                RecipeAPI.shared.search(searchTerms: thanksgiving, criteria: ingredientsAndTitle, has_nutrition: false, completion: {
                     result in
                     switch result {
                     case .failure(let error):
@@ -40,8 +40,9 @@ class BrowseVC: UIViewController {
                     case .success(let r):
                         self.recipes[RecipeCategories.thanksgiving] = r as! [RecipeNoNutrition]
                         // fill recommended
-                        let recommended: [String] = ["chicken"]
-                        RecipeAPI.shared.search(searchTerms: recommended, criteria: ingredients, has_nutrition: false, completion: {
+                        let quickAndEasy: [String] = ["Quick"]
+                        let title: [String] = ["title"]
+                        RecipeAPI.shared.search(searchTerms: quickAndEasy, criteria: title, has_nutrition: false, completion: {
                             result in
                             switch result {
                             case .failure(let error):

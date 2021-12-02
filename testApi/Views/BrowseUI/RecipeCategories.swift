@@ -1,17 +1,10 @@
-//
-//  RecipeCategories.swift
-//  testApi
-//
-//  Created by Angeline Lee on 1/12/21.
-//
-
 import Foundation
 import UIKit
 
 enum RecipeCategories: String, CaseIterable {
-    case topSection = "Top Section"
-    case suggestedByCreators = "Suggested by the Creators"
-    case bestUnder15Mins = "Best under 15 minutes"
+    case trending = "Trending Recipes"
+    case thanksgiving = "Thanksgiving Ideas"
+    case quickAndEasy = "Quick and Easy Recipes"
     
     init?(index: Int) {
         guard index < RecipeCategories.allCases.count else { return nil }
@@ -20,19 +13,19 @@ enum RecipeCategories: String, CaseIterable {
     
     func numberOfRows() -> Int{
         switch self {
-        case .topSection:
+        case .trending:
             return 2
-        case .suggestedByCreators, .bestUnder15Mins:
+        case .thanksgiving, .quickAndEasy:
             return 1
         }
     }
     
     func getScrollingBehavior() -> UICollectionLayoutSectionOrthogonalScrollingBehavior {
         switch self {
-        case .topSection:
+        case .trending:
             return .groupPaging
         
-        case .suggestedByCreators, .bestUnder15Mins:
+        case .thanksgiving, .quickAndEasy:
             return .paging
         }
     }
