@@ -27,7 +27,10 @@ struct Review: Codable {
     var text : String
 }
 
-public struct Recipe: Codable, Hashable {
+protocol RecipeType {
+    var id : String { get set}
+}
+public struct Recipe: Codable, Hashable,RecipeType {
     //Equatable conformance
     public static func == (lhs: Recipe, rhs: Recipe) -> Bool {
         return lhs.id == rhs.id
@@ -100,7 +103,7 @@ public struct Recipe: Codable, Hashable {
     //    hasher.combine(hashID)
     //}
 }
-public struct RecipeNoNutrition : Codable, Hashable {
+public struct RecipeNoNutrition : Codable, Hashable,RecipeType {
     var id : String
     //A list of ingredients, each item is an ingredient
     var ingredients : [Dictionary<String, String>]
@@ -266,42 +269,13 @@ class RecipeAPI {
             })
         }
     }
-    //API to search for recipes. takes an array of criteria (Strings) to find in an array of possible fields in the recipe. Allowed are title, ingredients, instructions.
-    func search(searchTerms: [String], criteria: [String], completion: ((Result<[Recipe],SignUpError>)->Void)?) {
-        validate_token()
-        let dish_name = searchTerms.joined(separator: "-")
-        let criteria_names = criteria.joined(separator: "-")
-        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/dish_keywords=" + dish_name + "&criteria=" + criteria_names + "&has_nutrition=true")!)
-        request.httpMethod = "GET"
-        request.addValue(token, forHTTPHeaderField: "x-access-tokens")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, urlresponse, error in
-            if let error = error {
-                print(error)
-                completion?(.failure(.unspecified))
-            }
-            let decoder = JSONDecoder()
-            do {
-                let http = urlresponse as! HTTPURLResponse
-                if http.statusCode == 403 {
-                    completion?(.failure(.usageLimitExceeded))
-                    print("Usage Limit Exceeded")
-                }
-                let recipes = try decoder.decode([Recipe].self, from: data!)
-                completion?(.success(recipes))
-            } catch {
-                print(error)
-            }
-            
-        })
-        task.resume()
-    }
+
     //API to search for recipes with no nutritional info. takes an array of criteria (Strings) to find in an array of possible fields in the recipe. Allowed are title, ingredients, instructions.
-    func search(searchTerms: [String], criteria: [String], has_nutrition: Bool, completion: ((Result<[RecipeNoNutrition],SignUpError>)->Void)?) {
+    func search(searchTerms: [String], criteria: [String], has_nutrition: Bool, completion: ((Result<[RecipeType],SignUpError>)->Void)?) {
         validate_token()
         let dish_name = searchTerms.joined(separator: "-")
         let criteria_names = criteria.joined(separator: "-")
-        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/dish_keywords=" + dish_name + "&criteria=" + criteria_names + "&has_nutrition=" + String(has_nutrition))!)
+        var request = URLRequest(url: URL(string: "https://mdbapi.dev/api/dish_keywords=" + dish_name + "&criteria=" + criteria_names + "&has_nutrition=\(has_nutrition)")!)
         request.httpMethod = "GET"
         request.addValue(token, forHTTPHeaderField: "x-access-tokens")
         let session = URLSession.shared
@@ -317,7 +291,12 @@ class RecipeAPI {
                     completion?(.failure(.usageLimitExceeded))
                     print("Usage Limit Exceeded")
                 }
-                let recipes = try decoder.decode([RecipeNoNutrition].self, from: data!)
+                let recipes : [RecipeType]!
+                if has_nutrition {
+                    recipes = try decoder.decode([Recipe].self, from: data!)
+                } else {
+                    recipes = try decoder.decode([RecipeNoNutrition].self, from: data!)
+                }
                 completion?(.success(recipes))
             } catch {
                 print(error)
