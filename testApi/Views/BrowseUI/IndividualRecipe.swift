@@ -19,11 +19,11 @@ class IndividualRecipe: UIViewController {
 
     private let returnButton: UIButton = {
         let btn = UIButton()
-        btn.backgroundColor = .white
+        btn.backgroundColor = .systemMint
         btn.setTitle("Back", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.tintColor = .systemMint
-        btn.setTitleColor(UIColor.systemMint, for: .normal)
+        btn.setTitleColor(UIColor.white, for: .normal)
         
         return btn
     }()
@@ -32,23 +32,22 @@ class IndividualRecipe: UIViewController {
     
     private let likeButton: UIButton = {
         let btn = UIButton()
-        btn.backgroundColor = .white
+        btn.backgroundColor = .systemMint
         btn.setTitle("Like", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.tintColor = .systemMint
-        btn.setTitleColor(UIColor.darkGray, for: .normal)
+        btn.setTitleColor(UIColor.white, for: .normal)
         
         return btn
     }()
     
     private let reviewButton: UIButton = {
         let btn = UIButton()
-        btn.backgroundColor = .white
+        btn.backgroundColor = .systemMint
         btn.setTitle("Reviews", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.tintColor = .systemMint
-        btn.setTitleColor(UIColor.darkGray, for: .normal)
-        
+        btn.setTitleColor(UIColor.white, for: .normal)
         return btn
     }()
     
@@ -243,11 +242,13 @@ class IndividualRecipe: UIViewController {
     }
     
     @objc func didTapReturn(_ sender: UIButton) {
+        BrowseVC.shared.updateData()
         dismiss(animated: true, completion: nil)
     }
     
     @objc func didTapLike(_ sender: UIButton) {
         RecipeAPI.shared.toggleRecipeLike(recipe_id: recipe!.id, completion: nil)
+        print("pressed like")
     }
     
     @objc func didTapReview(_ sender: UIButton) {

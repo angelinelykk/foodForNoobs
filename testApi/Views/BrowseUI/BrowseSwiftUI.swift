@@ -10,7 +10,7 @@ import SwiftUI
 
 struct BrowseSwiftUI: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> BrowseVC {
-        return BrowseVC()
+        return BrowseVC.shared
     }
     
     func updateUIViewController(_ uiViewController: BrowseVC, context: Context) {
