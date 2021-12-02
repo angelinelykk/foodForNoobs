@@ -21,7 +21,7 @@ struct AppNavigationView: View {
                     Image(systemName: "magnifyingglass")
                     Text("Search")
                 }
-            addMealPlan()
+            PlanVCSwiftUI()
                 .tabItem {
                     Image(systemName: "plus.circle.fill")
                     Text("Search")

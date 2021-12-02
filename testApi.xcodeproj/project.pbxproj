@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		367D5FF1275877DA0032009D /* PlanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367D5FF0275877DA0032009D /* PlanVC.swift */; };
+		367D5FF327587B410032009D /* PlanVCSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367D5FF227587B410032009D /* PlanVCSwiftUI.swift */; };
 		AA9F81192757489C00768DD9 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F81082757489C00768DD9 /* ProfileView.swift */; };
 		AA9F811A2757489C00768DD9 /* AddRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F810A2757489C00768DD9 /* AddRecipe.swift */; };
 		AA9F811C2757489C00768DD9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F810D2757489C00768DD9 /* LoginView.swift */; };
@@ -58,6 +60,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		367D5FF0275877DA0032009D /* PlanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanVC.swift; sourceTree = "<group>"; };
+		367D5FF227587B410032009D /* PlanVCSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanVCSwiftUI.swift; sourceTree = "<group>"; };
 		AA9F81082757489C00768DD9 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		AA9F810A2757489C00768DD9 /* AddRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipe.swift; sourceTree = "<group>"; };
 		AA9F810D2757489C00768DD9 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -170,6 +174,8 @@
 				E365AB9B2757630200187B8A /* RecipeCategories.swift */,
 				AA9F812627576AA900768DD9 /* BrowseSwiftUI.swift */,
 				D64EFF8A27585D4100AEDA96 /* SearchSwiftUI.swift */,
+				367D5FF227587B410032009D /* PlanVCSwiftUI.swift */,
+				367D5FF0275877DA0032009D /* PlanVC.swift */,
 			);
 			path = BrowseUI;
 			sourceTree = "<group>";
@@ -379,6 +385,7 @@
 				AA9F811F2757489C00768DD9 /* AppNavigationView.swift in Sources */,
 				D64EFF892758479F00AEDA96 /* SearchView.swift in Sources */,
 				AA9F811A2757489C00768DD9 /* AddRecipe.swift in Sources */,
+				367D5FF1275877DA0032009D /* PlanVC.swift in Sources */,
 				AA9F812727576AA900768DD9 /* BrowseSwiftUI.swift in Sources */,
 				D6CD44232753F78E00ACA18F /* UIColor+Hex.swift in Sources */,
 				D6C26D2E2741C7D900406DB3 /* AppDelegate.swift in Sources */,
@@ -390,6 +397,7 @@
 				D6CD44202753F78E00ACA18F /* UIColor+ColorScheme.swift in Sources */,
 				E365AB9C2757630200187B8A /* RecipeCategories.swift in Sources */,
 				D6C26D302741C7D900406DB3 /* SceneDelegate.swift in Sources */,
+				367D5FF327587B410032009D /* PlanVCSwiftUI.swift in Sources */,
 				AA9F811D2757489C00768DD9 /* ResetPasswordView.swift in Sources */,
 				D64EFF8B27585D4100AEDA96 /* SearchSwiftUI.swift in Sources */,
 				AA9F81202757489C00768DD9 /* ContentView.swift in Sources */,

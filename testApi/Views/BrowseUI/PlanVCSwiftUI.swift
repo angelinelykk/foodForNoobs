@@ -1,8 +1,12 @@
-//
-//  PlanVCSwiftUI.swift
-//  testApi
-//
-//  Created by Michelle Chang on 1/12/21.
-//
-
 import Foundation
+import SwiftUI
+
+struct PlanVCSwiftUI: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> PlanVC {
+        return PlanVC()
+    }
+    
+    func updateUIViewController(_ uiViewController: PlanVC, context: Context) {
+        
+    }
+}
