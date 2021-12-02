@@ -24,7 +24,25 @@ class BrowseVC: UIViewController {
     
     var navigationBar: UINavigationBar?
     
-    func updateData() {
+    override func viewWillAppear(_ animated: Bool) {
+        for v in view.subviews{
+            v.removeFromSuperview()
+        }
+        view.backgroundColor = .white
+        navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
+        
+        navigationBar!.tintColor = .systemMint
+        view.addSubview(navigationBar!)
+        
+        
+        let navItem = UINavigationItem(title: "Try Something New")
+
+        navigationBar!.setItems([navItem], animated: false)
+        
+        NSLayoutConstraint.activate([
+            navigationBar!.topAnchor.constraint(equalTo: view.topAnchor)
+        ])
+        
         RecipeAPI.shared.getMostLikedRecipes(number: 20, completion: { result in
             switch result {
             case .failure(let error):
@@ -52,7 +70,8 @@ class BrowseVC: UIViewController {
                             case .success(let r):
                                 self.recipes[RecipeCategories.quickAndEasy] = r as! [RecipeNoNutrition]
                                 DispatchQueue.main.sync {
-                                    self.collectionView.reloadData()
+                                    self.configureViews()
+                                    self.configureDataSource()
                                 }
                             }
                         })
@@ -60,11 +79,16 @@ class BrowseVC: UIViewController {
                 })
             }
         })
+        
+        //self.configureViews()
+        //self.configureDataSource()
+        
     }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
         navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
         
         navigationBar!.tintColor = .systemMint

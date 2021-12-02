@@ -242,7 +242,6 @@ class IndividualRecipe: UIViewController {
     }
     
     @objc func didTapReturn(_ sender: UIButton) {
-        BrowseVC.shared.updateData()
         dismiss(animated: true, completion: nil)
     }
     
